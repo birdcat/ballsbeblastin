@@ -14,7 +14,7 @@ ball_dictionary = {
     "b1": ["images/balls/b1main", "images/balls/b1bought", "images/balls/b1notbought", 10, 2, 0, True],
 }
 '''
-cannon_dictionary = {
+cannon_dict = {
     "c1": {"mainimg": "images/cannons/c1main",
            "boughtimg":"images/cannons/c1bought",
            "notboughtimg": "images/cannons/DNE",
@@ -52,7 +52,7 @@ cannon_dictionary = {
            "cost": 500,
            "bought": True}}
 
-ball_dictionary = {
+ball_dict = {
     "b1": {"mainimg": "images/cannons/b1main",
            "boughtimg":"images/cannons/b1bought",
            "notboughtimg": "images/cannons/b1notbought",
@@ -95,3 +95,5 @@ ball_dictionary = {
            "v": 2,
            "cost": 0,
            "bought": True}}
+
+print(cannon_dict["c1"["m"]])
