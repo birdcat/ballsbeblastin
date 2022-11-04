@@ -60,11 +60,11 @@ class Menu(object):
         menu_stats = pygame.Rect(self.width_border, self.menu_stats_y, self.menu_label_width, self.menu_stats_height)
         pygame.draw.rect(self.window, 'black', menu_stats, 5)
 
-        cannon_mass_text = stats_font.render(f'Cannon Mass:{cannon_dict["c1"]["m"]}', False, (0, 0, 0))
+        cannon_mass_text = stats_font.render(f'Cannon Mass:{cannon_dict[current_cannon]["m"]}', False, (0, 0, 0))
         self.window.blit(cannon_mass_text, (2*self.width_border, self.menu_stats_y+self.height_border))
-        ball_mass_text = stats_font.render('Ball Mass:', False, (0, 0, 0))
+        ball_mass_text = stats_font.render(f'Ball Mass:{ball_dict[current_ball]["m"]}', False, (0, 0, 0))
         self.window.blit(ball_mass_text, (2*self.width_border, self.menu_stats_y+50+self.height_border))
-        ball_velocity_text = stats_font.render('Ball Velocity:', False, (0, 0, 0))
+        ball_velocity_text = stats_font.render(f'Ball Velocity:{ball_dict[current_ball]["v"]}', False, (0, 0, 0))
         self.window.blit(ball_velocity_text, (2 * self.width_border, self.menu_stats_y + 100 + self.height_border))
 
         button_store = Button(
