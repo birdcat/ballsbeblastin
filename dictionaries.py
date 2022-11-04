@@ -96,4 +96,4 @@ ball_dict = {
            "cost": 0,
            "bought": True}}
 
-print(cannon_dict["c1"["m"]])
+print(cannon_dict["c1"]["m"])
