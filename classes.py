@@ -2,10 +2,6 @@ import pygame, sys
 from dictionaries import cannon_dict
 from dictionaries import ball_dict
 
-#HELLO
-
-#hahaha
-
 #global variables
 current_screen = 1
 current_cannon="c1"
@@ -98,6 +94,22 @@ class Menu(object):
             self.windowclock.tick(60)
 
 
+class Game(object):
+    def __init__(self):
+        self.screen_width = 1000
+        self.screen_height = 500
+        self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.windowclock = pygame.time.Clock()
+        self.Main()
+    def Main(self):
+        self.window.fill((255, 255, 255))
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            pygame.display.update()
+            self.windowclock.tick(60)
 
 if __name__ == '__main__':
     Menu()
