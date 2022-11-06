@@ -109,8 +109,30 @@ class Store(object):
         self.sw = w
         self.sh = h
         self.window = pygame.display.set_mode((self.sw, self.sh))
+        self.cannons = pygame.sprite.Group()
+        self.balls = pygame.sprite.Group()
 
     def loop(self):
+        # getting all the buttons into groups(should eventually go into seperate function)
+        xph = 20
+        yph = 50
+        countph = 0
+        for key in cannon_dict:
+            self.cannons.add(self.Storebutton(xph, yph + countph, cannon_dict[key]["m"], "", cannon_dict[key]["cost"], cannon_dict[key]["boughtimg"], cannon_dict[key]["notboughtimg"]))
+            countph += 200
+            if countph >= 600:
+                xph = 220
+                countph = 0
+        xph = 570
+        for key in ball_dict:
+            self.balls.add(self.Storebutton(xph, yph + countph, ball_dict[key]["m"], ball_dict[key]["v"], ball_dict[key]["cost"],
+                                              ball_dict[key]["boughtimg"], ball_dict[key]["notboughtimg"]))
+            countph += 200
+            if countph >= 600:
+                xph = 770
+                countph = 0
+
+
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -118,9 +140,38 @@ class Store(object):
 
             self.window.blit(self.bg, (0, 0))
 
+            self.cannons.draw(self.window)
+            self.balls.draw(self.window)
+
             pygame.display.update()
             self.clock.tick(60)
             #while True:
+
+    class Storebutton(pygame.sprite.Sprite):
+        def __init__(self, x, y, mass, velocity, cost, boughtimage, notboughtimage):
+            super().__init__()
+            self.image = pygame.image.load(notboughtimage)
+            self.image = pygame.transform.scale(self.image, (150, 150))
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+            self.mass = mass
+            self.velocity = velocity
+            self.cost = cost
+            self.images = [boughtimage, notboughtimage]
+            self.bought = False
+
+        def clickcheck(self, event):
+            x, y = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    if self.rect.collidepoint(x, y):
+                        print("clicked")
+                        return True
+            return False
+
+
+
 
 class Game(object):
     def __init__(self):
