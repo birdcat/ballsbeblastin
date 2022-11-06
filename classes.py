@@ -22,8 +22,7 @@ class Button:
         self.surface = pygame.Surface(size)
         self.surface.blit(self.text, (0, 0))
         self.rect = pygame.Rect(self.x, self.y, size[0], size[1])
-        self.window=window
-
+        self.window = window
 
     def draw(self):
         self.window.blit(self.surface, (self.x, self.y))
@@ -34,11 +33,12 @@ class Button:
             if pygame.mouse.get_pressed()[0]:
                 if self.rect.collidepoint(x, y):
                     print("clicked")
-
+                    return True
+        return False
 class Menu(object):
     def __init__(self):
-        self.screen_width = 1000
-        self.screen_height = 500
+        self.screen_width = 1250
+        self.screen_height = 700
         self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.windowclock = pygame.time.Clock()
         self.width_border = self.screen_width / 100
@@ -47,10 +47,13 @@ class Menu(object):
         self.menu_label_height = self.screen_height / 5
         self.menu_stats_y = self.height_border + self.menu_label_height + 10
         self.menu_stats_height = self.screen_height - self.menu_stats_y - self.height_border
+        self.bgimg = "images/mainbg.jpg"
+        self.bg = pygame.image.load(self.bgimg)
+        self.store = Store(self.screen_width, self.screen_height)
         self.Main()
 
     def Main(self):
-        self.window.fill((255, 255, 255))
+
         menu_label = pygame.Rect(self.width_border, self.height_border, self.menu_label_width, self.menu_label_height)
         pygame.draw.rect(self.window, 'black', menu_label, 5)
         menu_stats = pygame.Rect(self.width_border, self.menu_stats_y, self.menu_label_width, self.menu_stats_height)
@@ -76,7 +79,6 @@ class Menu(object):
             self.window
             )
 
-
         while True:
             # put drawing stuff here
 
@@ -86,13 +88,39 @@ class Menu(object):
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-                button_store.click(event)
+                if button_store.click(event):
+                    self.store.running = True
+                    self.store.loop()
                 button_game.click(event)
+            self.window.blit(self.bg, (0, 0))
             button_store.draw()
             button_game.draw()
             pygame.display.update()
             self.windowclock.tick(60)
 
+class Store(object):
+    def __init__(self, w, h):
+        self.bgimg = "images/storebg.jpg"
+        self.bg = pygame.image.load(self.bgimg)
+        self.cannon = current_cannon
+        self.ball = current_ball
+        self.running = False
+        self.clock = pygame.time.Clock()
+        self.sw = w
+        self.sh = h
+        self.window = pygame.display.set_mode((self.sw, self.sh))
+
+    def loop(self):
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+
+            self.window.blit(self.bg, (0, 0))
+
+            pygame.display.update()
+            self.clock.tick(60)
+            #while True:
 
 class Game(object):
     def __init__(self):
