@@ -112,20 +112,21 @@ class Store(object):
         self.cannons = pygame.sprite.Group()
         self.balls = pygame.sprite.Group()
 
+
     def loop(self):
         # getting all the buttons into groups(should eventually go into seperate function)
         xph = 20
         yph = 50
         countph = 0
         for key in cannon_dict:
-            self.cannons.add(self.Storebutton(xph, yph + countph, cannon_dict[key]["m"], "", cannon_dict[key]["cost"], cannon_dict[key]["boughtimg"], cannon_dict[key]["notboughtimg"]))
+            self.cannons.add(self.Storebutton(xph, yph + countph, key, cannon_dict[key]["m"], "", cannon_dict[key]["cost"], cannon_dict[key]["boughtimg"], cannon_dict[key]["notboughtimg"]))
             countph += 200
             if countph >= 600:
                 xph = 220
                 countph = 0
         xph = 570
         for key in ball_dict:
-            self.balls.add(self.Storebutton(xph, yph + countph, ball_dict[key]["m"], ball_dict[key]["v"], ball_dict[key]["cost"],
+            self.balls.add(self.Storebutton(xph, yph + countph, key, ball_dict[key]["m"], ball_dict[key]["v"], ball_dict[key]["cost"],
                                               ball_dict[key]["boughtimg"], ball_dict[key]["notboughtimg"]))
             countph += 200
             if countph >= 600:
@@ -138,18 +139,27 @@ class Store(object):
                 if event.type == pygame.QUIT:
                     self.running = False
 
+
             self.window.blit(self.bg, (0, 0))
 
             self.cannons.draw(self.window)
             self.balls.draw(self.window)
+
+            for cannon in self.cannons:
+                # cannon.clickcheck(event)
+                cannon.printinfo(self.window)
+            for ball in self.balls:
+                # ball.clickcheck(event)
+                ball.printinfo(self.window)
 
             pygame.display.update()
             self.clock.tick(60)
             #while True:
 
     class Storebutton(pygame.sprite.Sprite):
-        def __init__(self, x, y, mass, velocity, cost, boughtimage, notboughtimage):
+        def __init__(self, x, y, name, mass, velocity, cost, boughtimage, notboughtimage):
             super().__init__()
+            self.id = name
             self.image = pygame.image.load(notboughtimage)
             self.image = pygame.transform.scale(self.image, (150, 150))
             self.rect = self.image.get_rect()
@@ -160,6 +170,7 @@ class Store(object):
             self.cost = cost
             self.images = [boughtimage, notboughtimage]
             self.bought = False
+            self.font = pygame.font.SysFont('Comic Sans MS', 20)
 
         def clickcheck(self, event):
             x, y = pygame.mouse.get_pos()
@@ -170,6 +181,12 @@ class Store(object):
                         return True
             return False
 
+        def printinfo(self, window):
+            mtext = self.font.render(f'MASS:{self.mass}', False, (0, 0, 0))
+            window.blit(mtext, (self.rect.x + 110, self.rect.y + 55))
+            if self.velocity != "":
+                vtext = self.font.render(f'VELOCITY:{self.velocity}', False, (0, 0, 0))
+                window.blit(vtext, (self.rect.x + 110, self.rect.y + 80))
 
 
 
