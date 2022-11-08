@@ -250,4 +250,4 @@ class Game(object):
 
 
 if __name__ == '__main__':
-    Game()
+    Menu()
