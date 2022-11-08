@@ -235,19 +235,33 @@ class Game(object):
             return self.velocity
         def draw(self, window):
             window.blit(self.image, (200,300))
+    class Background(object):
+        def __init__(self, num):
+            self.back= pygame.image.load("images/mainbg.jpg")
+            #self.back2= pygame.image.load("images/mainbg.jpg")
+            self.backx=num
+        def move(self, window, v):
+            self.backx+=v
+            if self.backx==1250:
+                self.backx=-2590
+            window.blit(self.back, (self.backx, 0))
 
     def Main(self):
         cannon = self.Cannon()
         self.window.fill((255, 255, 255))
-        cannon.draw(self.window)
+        back1 = self.Background(0)
+        back2 = self.Background(-1920)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+            back1.move(self.window, cannon.velocity)
+            back2.move(self.window, cannon.velocity)
+            cannon.draw(self.window)
             pygame.display.update()
             self.windowclock.tick(60)
 
 
 if __name__ == '__main__':
-    Menu()
+    Game()
