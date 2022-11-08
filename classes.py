@@ -2,9 +2,6 @@ import pygame, sys
 from dictionaries import cannon_dict
 from dictionaries import ball_dict
 
-cannon_dict = cannon_dict
-ball_dict = ball_dict
-
 #global variables
 current_screen = 1
 current_cannon = "c1"
@@ -36,7 +33,6 @@ class Button:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
                 if self.rect.collidepoint(x, y):
-                    print("clicked")
                     return True
         return False
 class Menu(object):
@@ -54,11 +50,11 @@ class Menu(object):
         self.bgimg = "images/mainbg.jpg"
         self.bg = pygame.image.load(self.bgimg)
         self.store = Store(self.screen_width, self.screen_height)
+        self.game = Game()
         self.Main()
 
-    def Main(self):
+    def draw(self):
         self.window.blit(self.bg, (0, 0))
-
         menu_label = pygame.Rect(self.width_border, self.height_border, self.menu_label_width, self.menu_label_height)
         pygame.draw.rect(self.window, 'black', menu_label, 5)
         menu_stats = pygame.Rect(self.width_border, self.menu_stats_y, self.menu_label_width, self.menu_stats_height)
@@ -70,7 +66,8 @@ class Menu(object):
         self.window.blit(ball_mass_text, (2*self.width_border, self.menu_stats_y+50+self.height_border))
         ball_velocity_text = stats_font.render(f'Ball Velocity:{ball_dict[current_ball]["v"]}', False, (0, 0, 0))
         self.window.blit(ball_velocity_text, (2 * self.width_border, self.menu_stats_y + 100 + self.height_border))
-
+    def Main(self):
+        self.draw()
         button_store = Button(
             "Store",
             (2 * self.width_border, self.menu_stats_y + 170 + self.height_border),
@@ -96,9 +93,10 @@ class Menu(object):
                 if button_store.click(event):
                     self.store.running = True
                     self.store.loop()
-                #if button_game.click(event):
-                    #self.store.running.
-
+                if button_game.click(event):
+                    self.game.running = True
+                    self.game.loop()
+            self.draw()
             button_store.draw()
             button_game.draw()
             pygame.display.update()
@@ -117,10 +115,9 @@ class Store(object):
         self.window = pygame.display.set_mode((self.sw, self.sh))
         self.cannons = pygame.sprite.Group()
         self.balls = pygame.sprite.Group()
-        self.coinx = 700
-        self.coiny = 20
-        self.font = pygame.font.SysFont('Comic Sans MS', 20)
+        self.coins = 0
 
+    def loop(self):
         # getting all the buttons into groups(should eventually go into seperate function)
         xph = 20
         yph = 50
@@ -140,7 +137,6 @@ class Store(object):
                 xph = 770
                 countph = 0
 
-    def loop(self):
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -154,7 +150,6 @@ class Store(object):
 
             self.cannons.draw(self.window)
             self.balls.draw(self.window)
-            self.printcoins(current_coins)
 
             for cannon in self.cannons:
                 cannon.printinfo(self.window)
@@ -210,18 +205,13 @@ class Store(object):
                 print(current_coins, current_cannon, current_ball)
 
         def printinfo(self, window):
-            mtext = self.font.render(f'MASS:{self.mass}kg', False, (0, 0, 0))
+            mtext = self.font.render(f'MASS:{self.mass}', False, (0, 0, 0))
             window.blit(mtext, (self.rect.x + 110, self.rect.y + 55))
             if self.velocity != "":
-                vtext = self.font.render(f'VELOCITY:{self.velocity}m/s', False, (0, 0, 0))
+                vtext = self.font.render(f'VELOCITY:{self.velocity}', False, (0, 0, 0))
                 window.blit(vtext, (self.rect.x + 110, self.rect.y + 80))
             ctext = self.font.render(f'${self.cost}', False, (0, 0, 0))
             window.blit(ctext, (self.rect.x + 50, self.rect.y + 125))
-
-    def printcoins(self, current_coins):
-        cointext = self.font.render(f'YOU HAVE {current_coins} COINS', False, (0, 0, 0))
-        self.window.blit(cointext, (self.coinx, self.coiny))
-
 
 
 # ==================GAME STUFF==========================
@@ -229,15 +219,15 @@ class Game(object):
     def __init__(self):
         self.screen_width = 1000
         self.screen_height = 500
+        self.running = False
         self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.windowclock = pygame.time.Clock()
-        self.Main()
     class Cannon(object):
         def __init__(self):
             self.mass=cannon_dict[current_cannon]["m"]
             self.momentum=ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
             self.velocity = self.momentum/self.mass
-            self.acc=0.1
+            self.acc=0.01
             self.image=pygame.image.load(cannon_dict[current_cannon]["mainimg"])
         def slow(self, monster):
             self.momentum-=self.acc
@@ -245,7 +235,7 @@ class Game(object):
             # self.momentum-=monster.getMomentum()
         def calcSpeed(self):
             self.velocity=self.momentum/self.mass
-            return self.velocity
+            print(self.velocity)
         def draw(self, window):
             window.blit(self.image, (200,300))
     class Background(object):
@@ -259,16 +249,17 @@ class Game(object):
                 self.backx=-2590
             window.blit(self.back, (self.backx, 0))
 
-    def Main(self):
+    def loop(self):
         cannon = self.Cannon()
         self.window.fill((255, 255, 255))
         back1 = self.Background(0)
         back2 = self.Background(-1920)
-        while True:
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
+                    self.running = False
+            cannon.slow("a")
+            cannon.calcSpeed()
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window)
