@@ -54,6 +54,7 @@ class Menu(object):
         self.Main()
 
     def Main(self):
+        self.window.blit(self.bg, (0, 0))
 
         menu_label = pygame.Rect(self.width_border, self.height_border, self.menu_label_width, self.menu_label_height)
         pygame.draw.rect(self.window, 'black', menu_label, 5)
@@ -92,8 +93,7 @@ class Menu(object):
                 if button_store.click(event):
                     self.store.running = True
                     self.store.loop()
-                button_game.click(event)
-            self.window.blit(self.bg, (0, 0))
+
             button_store.draw()
             button_game.draw()
             pygame.display.update()
@@ -219,8 +219,27 @@ class Game(object):
         self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.windowclock = pygame.time.Clock()
         self.Main()
+    class Cannon(object):
+        def __init__(self):
+            self.mass=cannon_dict[current_cannon]["m"]
+            self.momentum=ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
+            self.velocity = self.momentum/self.mass
+            self.acc=0.1
+            self.image=pygame.image.load(cannon_dict[current_cannon]["mainimg"])
+        def slow(self, monster):
+            self.momentum-=self.acc
+            # self.mass+=monster.getMass()
+            # self.momentum-=monster.getMomentum()
+        def calcSpeed(self):
+            self.velocity=self.momentum/self.mass
+            return self.velocity
+        def draw(self, window):
+            window.blit(self.image, (200,300))
+
     def Main(self):
+        cannon = self.Cannon()
         self.window.fill((255, 255, 255))
+        cannon.draw(self.window)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -231,4 +250,4 @@ class Game(object):
 
 
 if __name__ == '__main__':
-    Menu()
+    Game()
