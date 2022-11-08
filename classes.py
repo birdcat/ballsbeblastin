@@ -242,26 +242,50 @@ class Game(object):
             self.back= pygame.image.load("images/mainbg.jpg")
             #self.back2= pygame.image.load("images/mainbg.jpg")
             self.backx=num
+            self.backy=-50
         def move(self, window, v):
             self.backx+=v
             if self.backx==1250:
                 self.backx=-2590
-            window.blit(self.back, (self.backx, 0))
+            window.blit(self.back, (self.backx, self.backy))
+        def shaky(self, shake):
+            self.backy+=shake
 
     def loop(self):
         cannon = self.Cannon()
         self.window.fill((255, 255, 255))
         back1 = self.Background(0)
         back2 = self.Background(-1920)
+        time = 0
+        shake = 90
+        up = True
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+
+            if time<3:
+                if up:
+                    back1.shaky(shake)
+                    back2.shaky(shake)
+                    if shake >0:
+                        shake-=0.5
+                    up = False
+                else:
+                    back1.shaky(-shake)
+                    back2.shaky(-shake)
+                    if shake > 0:
+                        shake -= 0.5
+                    up = True
+            else:
+                back1.backy= -50
+                back2.backy = -50
             cannon.slow("a")
             cannon.calcSpeed()
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window)
+            time+=1/60
             pygame.display.update()
             self.windowclock.tick(60)
 
