@@ -7,6 +7,8 @@ current_screen = 1
 current_cannon = "c1"
 current_ball = "b1"
 current_coins = 200
+window_width = 1250
+window_height = 650
 
 pygame.font.init()
 stats_font = pygame.font.SysFont('Comic Sans MS', 50)
@@ -36,19 +38,18 @@ class Button:
         return False
 class Menu(object):
     def __init__(self):
-        self.screen_width = 1250
-        self.screen_height = 700
-        self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
+
+        self.window = pygame.display.set_mode((window_width, window_height))
         self.windowclock = pygame.time.Clock()
-        self.width_border = self.screen_width / 100
-        self.height_border = self.screen_height / 50
-        self.menu_label_width = self.screen_width / 2
-        self.menu_label_height = self.screen_height / 5
+        self.width_border = window_width / 100
+        self.height_border = window_height / 50
+        self.menu_label_width = window_width / 2
+        self.menu_label_height = window_height / 5
         self.menu_stats_y = self.height_border + self.menu_label_height + 10
-        self.menu_stats_height = self.screen_height - self.menu_stats_y - self.height_border
+        self.menu_stats_height = window_height - self.menu_stats_y - self.height_border
         self.bgimg = "images/mainbg.jpg"
         self.bg = pygame.image.load(self.bgimg)
-        self.store = Store(self.screen_width, self.screen_height)
+        self.store = Store(window_width, window_height)
         self.game = Game()
         self.Main()
 
@@ -216,10 +217,9 @@ class Store(object):
 # ==================GAME STUFF==========================
 class Game(object):
     def __init__(self):
-        self.screen_width = 1000
-        self.screen_height = 500
+
         self.running = False
-        self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.window = pygame.display.set_mode((window_width, window_height))
         self.windowclock = pygame.time.Clock()
     class Cannon(object):
         def __init__(self):
@@ -235,7 +235,7 @@ class Game(object):
         def calcSpeed(self):
             self.velocity=self.momentum/self.mass
         def draw(self, window, y):
-            window.blit(self.image, (500,300+y))
+            window.blit(self.image, (600,400+y))
     class Background(object):
         def __init__(self, num):
             self.back= pygame.image.load("images/mainbg.jpg")
