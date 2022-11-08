@@ -221,6 +221,7 @@ class Game(object):
         self.running = False
         self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.windowclock = pygame.time.Clock()
+        self.time = 0
     class Cannon(object):
         def __init__(self):
             self.mass=cannon_dict[current_cannon]["m"]
@@ -248,6 +249,7 @@ class Game(object):
                 self.backx=-2590
             window.blit(self.back, (self.backx, 0))
 
+
     def loop(self):
         cannon = self.Cannon()
         self.window.fill((255, 255, 255))
@@ -262,6 +264,7 @@ class Game(object):
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window)
+            self.time+=1/60
             pygame.display.update()
             self.windowclock.tick(60)
 
