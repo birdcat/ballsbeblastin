@@ -236,7 +236,6 @@ class Game(object):
     class Background(object):
         def __init__(self, num):
             self.back= pygame.image.load("images/mainbg.jpg")
-            #self.back2= pygame.image.load("images/mainbg.jpg")
             self.backx = num
             self.backy =- 50
         def move(self, window, v):
@@ -247,9 +246,25 @@ class Game(object):
         def shaky(self, shake):
             self.backy += shake
 
+    class Monster(pygame.sprite.Sprite):
+        def __init__(self, name, imagedict, mass, velocity, clicks, coins):
+            super().__init__()
+            self.name = name
+            self.images = imagedict
+            self.image = pygame.image.load(imagedict + "/1.tiff")
+            self.mass = mass
+            self.velocity = velocity
+            self.clicks = clicks
+            self.coins = coins
+            self.clicked = 0
+            self.collided = False
+        #def normalmovement(self):
+            # will update movement based on cannon velocity, same as bg
+            #will run through animation
+
     def loop(self):
         cannon = self.Cannon()
-        self.window.fill((255, 255, 255))
+        #self.window.fill((255, 255, 255))
         back1 = self.Background(0)
         back2 = self.Background(-1920)
         time = 0
