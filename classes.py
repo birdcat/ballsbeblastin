@@ -217,38 +217,35 @@ class Store(object):
 # ==================GAME STUFF==========================
 class Game(object):
     def __init__(self):
-
         self.running = False
         self.window = pygame.display.set_mode((window_width, window_height))
         self.windowclock = pygame.time.Clock()
     class Cannon(object):
         def __init__(self):
-            self.mass=cannon_dict[current_cannon]["m"]
-            self.momentum=ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
+            self.mass = cannon_dict[current_cannon]["m"]
+            self.momentum = ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
             self.velocity = self.momentum/self.mass
-            self.acc=0.01
-            self.image=pygame.image.load(cannon_dict[current_cannon]["mainimg"])
-        def slow(self, monster):
-            self.momentum-=self.acc
-            # self.mass+=monster.getMass()
-            # self.momentum-=monster.getMomentum()
-        def calcSpeed(self):
-            self.velocity=self.momentum/self.mass
+            self.acc = 0.001
+            self.image = pygame.image.load(cannon_dict[current_cannon]["mainimg"])
+        def updatemovement(self):
+            self.velocity -= self.acc
+            self.momentum = self.mass*self.velocity
+
         def draw(self, window, y):
             window.blit(self.image, (600,400+y))
     class Background(object):
         def __init__(self, num):
             self.back= pygame.image.load("images/mainbg.jpg")
             #self.back2= pygame.image.load("images/mainbg.jpg")
-            self.backx=num
-            self.backy=-50
+            self.backx = num
+            self.backy =- 50
         def move(self, window, v):
-            self.backx+=v
-            if self.backx==1250:
-                self.backx=-2590
+            self.backx += v
+            if self.backx == 1250:
+                self.backx =- 2590
             window.blit(self.back, (self.backx, self.backy))
         def shaky(self, shake):
-            self.backy+=shake
+            self.backy += shake
 
     def loop(self):
         cannon = self.Cannon()
@@ -267,8 +264,8 @@ class Game(object):
                 if up:
                     back1.shaky(shake)
                     back2.shaky(shake)
-                    if shake >0:
-                        shake-=0.5
+                    if shake > 0:
+                        shake -= 0.5
                     up = False
                 else:
                     back1.shaky(-shake)
@@ -276,14 +273,13 @@ class Game(object):
                     if shake > 0:
                         shake -= 0.5
                     up = True
-            cannon.slow("a")
-            cannon.calcSpeed()
+            cannon.updatemovement()
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window, back1.backy)
-            if cannon.velocity<=0:
-                self.running=False
-            time+=1/60
+            if cannon.velocity <= 0:
+                self.running = False
+            time += 1/60
             pygame.display.update()
             self.windowclock.tick(60)
 
