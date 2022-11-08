@@ -99,14 +99,14 @@ ball_dict = {
 monster_dict = {
     "m1": {
         "imagefolder": "images/monsters/greenslime",
-        "mass": 2
-        "velocity": 0
+        "mass": 2,
+        "velocity": 0,
         "clickcount": 3
     },
     "m2": {
         "imagefolder": "images/monsters/redslime",
-        "mass": 4
-        "velocity": 0
+        "mass": 4,
+        "velocity": 0,
         "clickcount": 5
     }
 
