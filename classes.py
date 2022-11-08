@@ -218,13 +218,13 @@ class Game(object):
         self.screen_height = 500
         self.window = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.windowclock = pygame.time.Clock()
-        self.Main()
+        self.loop()
     class Cannon(object):
         def __init__(self):
             self.mass=cannon_dict[current_cannon]["m"]
             self.momentum=ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
             self.velocity = self.momentum/self.mass
-            self.acc=0.1
+            self.acc=0.01
             self.image=pygame.image.load(cannon_dict[current_cannon]["mainimg"])
         def slow(self, monster):
             self.momentum-=self.acc
@@ -232,7 +232,7 @@ class Game(object):
             # self.momentum-=monster.getMomentum()
         def calcSpeed(self):
             self.velocity=self.momentum/self.mass
-            return self.velocity
+            print(self.velocity)
         def draw(self, window):
             window.blit(self.image, (200,300))
     class Background(object):
@@ -246,7 +246,7 @@ class Game(object):
                 self.backx=-2590
             window.blit(self.back, (self.backx, 0))
 
-    def Main(self):
+    def loop(self):
         cannon = self.Cannon()
         self.window.fill((255, 255, 255))
         back1 = self.Background(0)
@@ -256,6 +256,8 @@ class Game(object):
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+            cannon.slow("a")
+            cannon.calcSpeed()
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window)
