@@ -2,6 +2,9 @@ import pygame, sys
 from dictionaries import cannon_dict
 from dictionaries import ball_dict
 
+cannon_dict = cannon_dict
+ball_dict = ball_dict
+
 #global variables
 current_screen = 1
 current_cannon = "c1"
@@ -93,6 +96,8 @@ class Menu(object):
                 if button_store.click(event):
                     self.store.running = True
                     self.store.loop()
+                #if button_game.click(event):
+                    #self.store.running.
 
             button_store.draw()
             button_game.draw()
@@ -112,9 +117,10 @@ class Store(object):
         self.window = pygame.display.set_mode((self.sw, self.sh))
         self.cannons = pygame.sprite.Group()
         self.balls = pygame.sprite.Group()
-        self.coins = 0
+        self.coinx = 700
+        self.coiny = 20
+        self.font = pygame.font.SysFont('Comic Sans MS', 20)
 
-    def loop(self):
         # getting all the buttons into groups(should eventually go into seperate function)
         xph = 20
         yph = 50
@@ -134,6 +140,7 @@ class Store(object):
                 xph = 770
                 countph = 0
 
+    def loop(self):
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -147,6 +154,7 @@ class Store(object):
 
             self.cannons.draw(self.window)
             self.balls.draw(self.window)
+            self.printcoins(current_coins)
 
             for cannon in self.cannons:
                 cannon.printinfo(self.window)
@@ -202,13 +210,18 @@ class Store(object):
                 print(current_coins, current_cannon, current_ball)
 
         def printinfo(self, window):
-            mtext = self.font.render(f'MASS:{self.mass}', False, (0, 0, 0))
+            mtext = self.font.render(f'MASS:{self.mass}kg', False, (0, 0, 0))
             window.blit(mtext, (self.rect.x + 110, self.rect.y + 55))
             if self.velocity != "":
-                vtext = self.font.render(f'VELOCITY:{self.velocity}', False, (0, 0, 0))
+                vtext = self.font.render(f'VELOCITY:{self.velocity}m/s', False, (0, 0, 0))
                 window.blit(vtext, (self.rect.x + 110, self.rect.y + 80))
             ctext = self.font.render(f'${self.cost}', False, (0, 0, 0))
             window.blit(ctext, (self.rect.x + 50, self.rect.y + 125))
+
+    def printcoins(self, current_coins):
+        cointext = self.font.render(f'YOU HAVE {current_coins} COINS', False, (0, 0, 0))
+        self.window.blit(cointext, (self.coinx, self.coiny))
+
 
 
 # ==================GAME STUFF==========================
@@ -264,4 +277,4 @@ class Game(object):
 
 
 if __name__ == '__main__':
-    Game()
+    Menu()
