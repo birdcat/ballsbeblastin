@@ -14,7 +14,6 @@ button_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 '''---------------------------------SPRITES/CLASSES---------------------'''
 
-
 class Button:
     def __init__(self, text, pos, size, window):
         self.x, self.y = pos
@@ -117,25 +116,31 @@ class Store(object):
         self.balls = pygame.sprite.Group()
         self.coins = 0
 
-    def loop(self):
         # getting all the buttons into groups(should eventually go into seperate function)
         xph = 20
         yph = 50
         countph = 0
         for key in cannon_dict:
-            self.cannons.add(self.Storebutton(xph, yph + countph, key, "c", cannon_dict[key]["m"], "", cannon_dict[key]["cost"], cannon_dict[key]["boughtimg"], cannon_dict[key]["notboughtimg"], cannon_dict[key]["bought"]))
+            self.cannons.add(
+                self.Storebutton(xph, yph + countph, key, "c", cannon_dict[key]["m"], "", cannon_dict[key]["cost"],
+                                 cannon_dict[key]["boughtimg"], cannon_dict[key]["notboughtimg"],
+                                 cannon_dict[key]["bought"]))
             countph += 200
             if countph >= 600:
                 xph = 220
                 countph = 0
         xph = 570
         for key in ball_dict:
-            self.balls.add(self.Storebutton(xph, yph + countph, key, "b", ball_dict[key]["m"], ball_dict[key]["v"], ball_dict[key]["cost"],
-                                              ball_dict[key]["boughtimg"], ball_dict[key]["notboughtimg"], ball_dict[key]["bought"]))
+            self.balls.add(self.Storebutton(xph, yph + countph, key, "b", ball_dict[key]["m"], ball_dict[key]["v"],
+                                            ball_dict[key]["cost"],
+                                            ball_dict[key]["boughtimg"], ball_dict[key]["notboughtimg"],
+                                            ball_dict[key]["bought"]))
             countph += 200
             if countph >= 600:
                 xph = 770
                 countph = 0
+
+    def loop(self):
 
         while self.running:
             for event in pygame.event.get():
