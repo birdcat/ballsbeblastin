@@ -234,9 +234,8 @@ class Game(object):
             # self.momentum-=monster.getMomentum()
         def calcSpeed(self):
             self.velocity=self.momentum/self.mass
-            print(self.velocity)
-        def draw(self, window):
-            window.blit(self.image, (200,300))
+        def draw(self, window, y):
+            window.blit(self.image, (500,300+y))
     class Background(object):
         def __init__(self, num):
             self.back= pygame.image.load("images/mainbg.jpg")
@@ -257,14 +256,14 @@ class Game(object):
         back1 = self.Background(0)
         back2 = self.Background(-1920)
         time = 0
-        shake = 90
+        shake = 50
         up = True
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
 
-            if time<3:
+            if time<5:
                 if up:
                     back1.shaky(shake)
                     back2.shaky(shake)
@@ -277,14 +276,13 @@ class Game(object):
                     if shake > 0:
                         shake -= 0.5
                     up = True
-            else:
-                back1.backy= -50
-                back2.backy = -50
             cannon.slow("a")
             cannon.calcSpeed()
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
-            cannon.draw(self.window)
+            cannon.draw(self.window, back1.backy)
+            if cannon.velocity<=0:
+                self.running=False
             time+=1/60
             pygame.display.update()
             self.windowclock.tick(60)
