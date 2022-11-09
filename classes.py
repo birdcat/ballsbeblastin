@@ -1,6 +1,7 @@
 import pygame, sys
 from dictionaries import cannon_dict
 from dictionaries import ball_dict
+from dictionaries import monster_dict
 
 #global variables
 current_screen = 1
@@ -226,6 +227,7 @@ class Game(object):
         self.running = False
         self.window = pygame.display.set_mode((window_width, window_height))
         self.windowclock = pygame.time.Clock()
+        self.monsters = pygame.sprite.Group()
     class Cannon(object):
         def __init__(self):
             self.mass = cannon_dict[current_cannon]["m"]
@@ -253,27 +255,32 @@ class Game(object):
             self.backy += shake
 
     class Monster(pygame.sprite.Sprite):
-        def __init__(self, name, imagedict, mass, velocity, clicks, coins, x, y):
-            super().__init__()
+        def __init__(self, monster_dict, name,  x, y):
+            ssuper().__init__()
             self.name = name
-            self.images = imagedict
-            self.image = pygame.image.load(imagedict + "/1.tiff")
+            self.images = monster_dict[name]["imagefolder"]
+            self.image = pygame.image.load(self.images + "/1.tiff")
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
-            self.mass = mass
-            self.velocity = velocity
-            self.clicks = clicks
-            self.coins = coins
+            self.mass = monster_dict[name]["mass"]
+            self.velocity = monster_dict[name]["velocity"]
+            self.clicks = monster_dict[name]["clickcount"]
+            self.coins = monster_dict[name]["coins"]
             self.clicked = 0
             self.collided = False
-        #def normalmovement(self, cannon):
-            # will update movement based on cannon velocity, same as bg
-            #will run through animation
+            self.counter = 1
+        def normalmovement(self, velocity):
+            self.rect.x += velocity
+            if self.counter == 11:
+                self.counter = 1
+            self.image = pygame.image.load(self.images + "/" + str(self.counter) + ".tiff")
+            self.counter += 1
 
     def loop(self):
         cannon = self.Cannon()
-        #self.window.fill((255, 255, 255))
+        monster = self.Monster(monster_dict, "m1", 0, 400)
+        self.monsters.add(monster)
         back1 = self.Background(0)
         back2 = self.Background(-1920)
         time = 0
@@ -298,9 +305,11 @@ class Game(object):
                         shake -= 0.5
                     up = True
             cannon.updatemovement()
+            monster.normalmovement(cannon.velocity)
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window, back1.backy)
+            self.monsters.draw(self.window)
             if cannon.velocity <= 0:
                 self.running = False
             time += 1/60
