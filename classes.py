@@ -115,7 +115,8 @@ class Store(object):
         self.window = pygame.display.set_mode((self.sw, self.sh))
         self.cannons = pygame.sprite.Group()
         self.balls = pygame.sprite.Group()
-        self.coins = 0
+        self.font = pygame.font.SysFont('Comic Sans MS', 20)
+        self.coinx, self.coiny = 700, 20
 
         # getting all the buttons into groups(should eventually go into seperate function)
         xph = 20
@@ -136,7 +137,6 @@ class Store(object):
                 countph = 0
 
     def loop(self):
-
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -147,6 +147,8 @@ class Store(object):
                     ball.clickcheck(event)
 
             self.window.blit(self.bg, (0, 0))
+
+            self.printcoins(current_coins)
 
             self.cannons.draw(self.window)
             self.balls.draw(self.window)
@@ -213,6 +215,10 @@ class Store(object):
             ctext = self.font.render(f'${self.cost}', False, (0, 0, 0))
             window.blit(ctext, (self.rect.x + 50, self.rect.y + 125))
 
+    def printcoins(self, current_coins):
+        cointext = self.font.render(f'YOU HAVE {current_coins} COINS', False, (0, 0, 0))
+        self.window.blit(cointext, (self.coinx, self.coiny))
+
 
 # ==================GAME STUFF==========================
 class Game(object):
@@ -247,18 +253,21 @@ class Game(object):
             self.backy += shake
 
     class Monster(pygame.sprite.Sprite):
-        def __init__(self, name, imagedict, mass, velocity, clicks, coins):
+        def __init__(self, name, imagedict, mass, velocity, clicks, coins, x, y):
             super().__init__()
             self.name = name
             self.images = imagedict
             self.image = pygame.image.load(imagedict + "/1.tiff")
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
             self.mass = mass
             self.velocity = velocity
             self.clicks = clicks
             self.coins = coins
             self.clicked = 0
             self.collided = False
-        #def normalmovement(self):
+        #def normalmovement(self, cannon):
             # will update movement based on cannon velocity, same as bg
             #will run through animation
 
