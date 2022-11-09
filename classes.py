@@ -139,8 +139,17 @@ class Store(object):
 
     def loop(self):
         while self.running:
+            while self.running:
+                button_back = Button(
+                    "Home",
+                    (0, 0),
+                    (100, 50),
+                    self.window
+                )
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.running = False
+                if button_back.click(event):
                     self.running = False
                 for cannon in self.cannons:
                     cannon.clickcheck(event)
@@ -153,6 +162,8 @@ class Store(object):
 
             self.cannons.draw(self.window)
             self.balls.draw(self.window)
+
+            button_back.draw()
 
             for cannon in self.cannons:
                 cannon.printinfo(self.window)
@@ -248,15 +259,15 @@ class Game(object):
             self.backy =- 50
         def move(self, window, v):
             self.backx += v
-            if self.backx == 1250:
-                self.backx =- 2590
+            if self.backx >= 1250:
+                self.backx = -2590
             window.blit(self.back, (self.backx, self.backy))
         def shaky(self, shake):
             self.backy += shake
 
     class Monster(pygame.sprite.Sprite):
         def __init__(self, monster_dict, name,  x, y):
-            ssuper().__init__()
+            super().__init__()
             self.name = name
             self.images = monster_dict[name]["imagefolder"]
             self.image = pygame.image.load(self.images + "/1.tiff")
@@ -279,6 +290,12 @@ class Game(object):
 
     def loop(self):
         cannon = self.Cannon()
+        button_back = Button(
+            "Home",
+            (0, 0),
+            (100, 50),
+            self.window
+        )
         monster = self.Monster(monster_dict, "m1", 0, 400)
         self.monsters.add(monster)
         back1 = self.Background(0)
@@ -289,6 +306,8 @@ class Game(object):
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.running = False
+                if button_back.click(event):
                     self.running = False
 
             if time<5:
@@ -309,6 +328,7 @@ class Game(object):
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window, back1.backy)
+            button_back.draw()
             self.monsters.draw(self.window)
             if cannon.velocity <= 0:
                 self.running = False
