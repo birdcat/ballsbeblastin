@@ -16,7 +16,6 @@ stats_font = pygame.font.SysFont('Comic Sans MS', 50)
 button_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 '''---------------------------------SPRITES/CLASSES---------------------'''
-
 class Button:
     def __init__(self, text, pos, size, window):
         self.x, self.y = pos
@@ -139,13 +138,12 @@ class Store(object):
 
     def loop(self):
         while self.running:
-            while self.running:
-                button_back = Button(
-                    "Home",
-                    (0, 0),
-                    (100, 50),
-                    self.window
-                )
+            button_back = Button(
+                "Home",
+                (0, 0),
+                (100, 50),
+                self.window
+            )
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
