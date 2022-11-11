@@ -281,17 +281,40 @@ class Game(object):
             self.rect.y = y
             self.mass = monster_dict[name]["mass"]
             self.velocity = monster_dict[name]["velocity"]
-            self.clicks = monster_dict[name]["clickcount"]
+            self.clicksneeded = monster_dict[name]["clickcount"]
             self.coins = monster_dict[name]["coins"]
-            self.clicked = 0
+            self.clicksclicked = 0
+            self.clicked = False
             self.collided = False
             self.counter = 1
+            self.dead = False
         def normalmovement(self, velocity):
-            self.rect.x += velocity
-            if self.counter == 11:
-                self.counter = 1
-            self.image = pygame.image.load(self.images + "/" + str(self.counter) + ".tiff")
-            self.counter += 1
+            if self.collided:
+                t = 0
+            else:
+                self.rect.x += velocity
+                if self.counter == 11:
+                    self.counter = 1
+                self.image = pygame.image.load(self.images + "/" + str(self.counter) + ".tiff")
+                self.counter += 1
+        def clickcheck(self, event):
+            x, y = pygame.mouse.get_pos()
+            global current_coins
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    if self.rect.collidepoint(x, y) and not self.clicked:
+                        self.clicked = True
+                        self.clicksclicked += 1
+                        print(self.clicksclicked)
+                        if self.clicksclicked == self.clicksneeded:
+                            self.dead = True
+                            current_coins += self.coins
+
+
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        self.clicked = False
+
+
 
     def loop(self):
         cannon = self.Cannon()
@@ -315,6 +338,8 @@ class Game(object):
                     self.running = False
                 if button_back.click(event):
                     self.running = False
+                for monster in self.monsters:
+                    monster.clickcheck(event)
 
             if time<5:
                 if up:
@@ -331,6 +356,9 @@ class Game(object):
                     up = True
             cannon.updatemovement()
             monster.normalmovement(cannon.velocity)
+            for monster in self.monsters:
+                if monster.dead:
+                    self.monsters.remove(monster)
             back1.move(self.window, cannon.velocity)
             back2.move(self.window, cannon.velocity)
             cannon.draw(self.window, back1.backy)
