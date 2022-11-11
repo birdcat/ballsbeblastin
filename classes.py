@@ -310,9 +310,8 @@ class Game(object):
                             self.dead = True
                             current_coins += self.coins
 
-
-                    elif event.type == pygame.MOUSEBUTTONDOWN:
-                        self.clicked = False
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.clicked = False
 
 
 
