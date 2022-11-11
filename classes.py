@@ -250,7 +250,7 @@ class Game(object):
             super().__init__()
             self.mass = cannon_dict[current_cannon]["m"]
             self.momentum = ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
-            self.velocity = self.momentum/self.mass
+            self.velocity = round(self.momentum/self.mass, 5)
             self.acc = 0.005
             self.image = pygame.image.load(cannon_dict[current_cannon]["mainimg"])
             self.rect = self.image.get_rect()
@@ -291,6 +291,7 @@ class Game(object):
             self.image = pygame.image.load(self.images + "/1.tiff")
             self.rect = self.image.get_rect()
             self.rect.x = x
+            self.x = x
             self.rect.y = y
             self.mass = monster_dict[name]["mass"]
             self.velocity = monster_dict[name]["velocity"]
@@ -306,7 +307,9 @@ class Game(object):
             if self.collided:
                 t = 0
             else:
-                self.rect.x += velocity
+                self.x += velocity
+                self.rect.x = self.x
+                print(self.rect.x)
                 if self.countercounter == 20:
                     self.counter += 1
                     if self.counter == 11:
