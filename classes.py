@@ -3,14 +3,16 @@ from dictionaries import cannon_dict
 from dictionaries import ball_dict
 from dictionaries import monster_dict
 
-#global variables
-current_screen = 1
+# global variables moved to separate file later
 current_cannon = "c1"
 current_ball = "b1"
 current_coins = 200
+
+# window stuff
 window_width = 1250
 window_height = 650
 
+# Different fonts we'll use
 pygame.font.init()
 title_font = pygame.font.SysFont('Comic Sans MS', 60)
 stats_font = pygame.font.SysFont('Comic Sans MS', 50)
@@ -18,6 +20,7 @@ button_font = pygame.font.SysFont('Comic Sans MS', 30)
 label_font=pygame.font.SysFont('Comic Sans MS', 15)
 
 '''---------------------------------SPRITES/CLASSES---------------------'''
+# Very used button class: makes text button
 class Button:
     def __init__(self, text, pos, size, window):
         self.x, self.y = pos
@@ -27,10 +30,8 @@ class Button:
         self.surface.blit(self.text, (0, 0))
         self.rect = pygame.Rect(self.x, self.y, size[0], size[1])
         self.window = window
-
     def draw(self):
         self.window.blit(self.surface, (self.x, self.y))
-
     def click(self, event):
         x, y = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -38,9 +39,10 @@ class Button:
                 if self.rect.collidepoint(x, y):
                     return True
         return False
+
+# Starting screen: menu, leads to store and game. Shows current stats
 class Menu(object):
     def __init__(self):
-
         self.window = pygame.display.set_mode((window_width, window_height))
         self.windowclock = pygame.time.Clock()
         self.width_border = window_width / 100
@@ -342,7 +344,8 @@ class Game(object):
             (100, 50),
             self.window
         )
-        monster = self.Monster(monster_dict, "m1", 0, 400)
+        monster = self.Monster(monster_dict, "m1", -cannon.velocity*300, 400)
+        print(-cannon.velocity*300)
         self.monsters.add(monster)
         #self.window.fill((255, 255, 255))
         back1 = self.Background(0)
