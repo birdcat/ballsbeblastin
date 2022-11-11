@@ -259,7 +259,7 @@ class Game(object):
             window.blit(self.image, (600,400+y))
     class Background(object):
         def __init__(self, num):
-            self.back= pygame.image.load("images/mainbg.jpg")
+            self.back= pygame.transform.scale(pygame.image.load("images/P_Cave_Background.jpg"), (1300, 650))
             self.backx = num
             self.backy =- 50
         def move(self, window, v):
@@ -327,7 +327,7 @@ class Game(object):
         self.monsters.add(monster)
         #self.window.fill((255, 255, 255))
         back1 = self.Background(0)
-        back2 = self.Background(-1920)
+        back2 = self.Background(-1300)
         time = 0
         shake = 50
         up = True
@@ -340,7 +340,7 @@ class Game(object):
                 for monster in self.monsters:
                     monster.clickcheck(event)
 
-            if time<5:
+            if time >1.1 and time<5:
                 if up:
                     back1.shaky(shake)
                     back2.shaky(shake)
@@ -353,20 +353,10 @@ class Game(object):
                     if shake > 0:
                         shake -= 0.5
                     up = True
-            cannon.updatemovement()
-            monster.normalmovement(cannon.velocity)
-            for monster in self.monsters:
-                if monster.dead:
-                    self.monsters.remove(monster)
-            back1.move(self.window, cannon.velocity)
-            back2.move(self.window, cannon.velocity)
-            cannon.draw(self.window, back1.backy)
-            button_back.draw()
-            self.monsters.draw(self.window)
-            cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass} kg', False, (0, 0, 0))
-            self.window.blit(cannon_mass_text, (850, 500))
-            cannon_velocity_text = label_font.render(f'Cannon Velocity: {round(cannon.velocity, 2)} m/s', False, (0, 0, 0))
-            self.window.blit(cannon_velocity_text, (850, 520))
+            if time > 1:
+                self.draw(cannon, monster, button_back, back1, back2)
+            else:
+                self.drawPrefire(cannon, button_back, back1)
             if cannon.velocity <= 0:
                 self.running = False
             time += 1/60
@@ -384,6 +374,16 @@ class Game(object):
         cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass} kg', False, (0, 0, 0))
         self.window.blit(cannon_mass_text, (850, 500))
         cannon_velocity_text = label_font.render(f'Cannon Velocity: {round(cannon.velocity, 2)} m/s', False, (0, 0, 0))
+        self.window.blit(cannon_velocity_text, (850, 520))
+    def drawPrefire(self, cannon, button_back, back1):
+        back1.move(self.window, 0)
+        cannon.draw(self.window, back1.backy)
+        button_back.draw()
+        cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass + ball_dict[current_ball]["m"]} kg', False,
+                                             (0, 0, 0))
+        self.window.blit(cannon_mass_text, (850, 500))
+        cannon_velocity_text = label_font.render(f'Cannon Velocity: 0 m/s', False,
+                                                 (0, 0, 0))
         self.window.blit(cannon_velocity_text, (850, 520))
 
 
