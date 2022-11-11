@@ -12,8 +12,10 @@ window_width = 1250
 window_height = 650
 
 pygame.font.init()
+title_font = pygame.font.SysFont('Comic Sans MS', 60)
 stats_font = pygame.font.SysFont('Comic Sans MS', 50)
 button_font = pygame.font.SysFont('Comic Sans MS', 30)
+label_font=pygame.font.SysFont('Comic Sans MS', 15)
 
 '''---------------------------------SPRITES/CLASSES---------------------'''
 class Button:
@@ -60,12 +62,17 @@ class Menu(object):
         menu_stats = pygame.Rect(self.width_border, self.menu_stats_y, self.menu_label_width, self.menu_stats_height)
         pygame.draw.rect(self.window, 'black', menu_stats, 5)
 
+        title_text = title_font.render("BALLS BE BLASTIN'", False, (0, 0, 0))
+        self.window.blit(title_text, (2 * self.width_border, 50))
         cannon_mass_text = stats_font.render(f'Cannon Mass:{cannon_dict[current_cannon]["m"]}', False, (0, 0, 0))
         self.window.blit(cannon_mass_text, (2*self.width_border, self.menu_stats_y+self.height_border))
         ball_mass_text = stats_font.render(f'Ball Mass:{ball_dict[current_ball]["m"]}', False, (0, 0, 0))
         self.window.blit(ball_mass_text, (2*self.width_border, self.menu_stats_y+50+self.height_border))
         ball_velocity_text = stats_font.render(f'Ball Velocity:{ball_dict[current_ball]["v"]}', False, (0, 0, 0))
         self.window.blit(ball_velocity_text, (2 * self.width_border, self.menu_stats_y + 100 + self.height_border))
+
+        cannon_image = pygame.transform.scale(pygame.image.load(cannon_dict[current_cannon]["mainimg"]), (500,300))
+        self.window.blit(cannon_image, (700, 300))
     def Main(self):
         self.draw()
         button_store = Button(
@@ -242,7 +249,7 @@ class Game(object):
             self.mass = cannon_dict[current_cannon]["m"]
             self.momentum = ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
             self.velocity = self.momentum/self.mass
-            self.acc = 0.001
+            self.acc = 0.005
             self.image = pygame.image.load(cannon_dict[current_cannon]["mainimg"])
         def updatemovement(self):
             self.velocity -= self.acc
@@ -296,6 +303,7 @@ class Game(object):
         )
         monster = self.Monster(monster_dict, "m1", 0, 400)
         self.monsters.add(monster)
+        #self.window.fill((255, 255, 255))
         back1 = self.Background(0)
         back2 = self.Background(-1920)
         time = 0
@@ -328,11 +336,28 @@ class Game(object):
             cannon.draw(self.window, back1.backy)
             button_back.draw()
             self.monsters.draw(self.window)
+            cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass} kg', False, (0, 0, 0))
+            self.window.blit(cannon_mass_text, (850, 500))
+            cannon_velocity_text = label_font.render(f'Cannon Velocity: {round(cannon.velocity, 2)} m/s', False, (0, 0, 0))
+            self.window.blit(cannon_velocity_text, (850, 520))
             if cannon.velocity <= 0:
                 self.running = False
             time += 1/60
             pygame.display.update()
             self.windowclock.tick(60)
+
+    def draw(self, cannon, monster, button_back, back1, back2):
+        cannon.updatemovement()
+        monster.normalmovement(cannon.velocity)
+        back1.move(self.window, cannon.velocity)
+        back2.move(self.window, cannon.velocity)
+        cannon.draw(self.window, back1.backy)
+        button_back.draw()
+        self.monsters.draw(self.window)
+        cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass} kg', False, (0, 0, 0))
+        self.window.blit(cannon_mass_text, (850, 500))
+        cannon_velocity_text = label_font.render(f'Cannon Velocity: {round(cannon.velocity, 2)} m/s', False, (0, 0, 0))
+        self.window.blit(cannon_velocity_text, (850, 520))
 
 
 if __name__ == '__main__':
