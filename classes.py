@@ -251,12 +251,20 @@ class Game(object):
             self.velocity = self.momentum/self.mass
             self.acc = 0.005
             self.image = pygame.image.load(cannon_dict[current_cannon]["mainimg"])
+            self.monstercollisioncount = 0
         def updatemovement(self):
             self.velocity -= self.acc
             self.momentum = self.mass*self.velocity
 
         def draw(self, window, y):
             window.blit(self.image, (600,400+y))
+
+        def monstercollisioncheck(self, monster):
+            if self.rect.colliderect(monster) and not monster.collided:
+                monster.collided = True
+                self.mass += monster.mass
+                monster.velocity = 0
+                monster.
     class Background(object):
         def __init__(self, num):
             self.back= pygame.transform.scale(pygame.image.load("images/P_Cave_Background.jpg"), (1300, 650))
@@ -340,7 +348,7 @@ class Game(object):
                 for monster in self.monsters:
                     monster.clickcheck(event)
 
-            if time >1.1 and time<5:
+            if time > 1.1 and time<5:
                 if up:
                     back1.shaky(shake)
                     back2.shaky(shake)
@@ -365,6 +373,7 @@ class Game(object):
 
     def draw(self, cannon, monster, button_back, back1, back2):
         for monster in self.monsters:
+            monster.normalmovement(cannon.velocity)
             if monster.dead:
                 self.monsters.remove(monster)
         cannon.updatemovement()
