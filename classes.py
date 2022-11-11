@@ -7,7 +7,7 @@ from dictionaries import monster_dict
 current_screen = 1
 current_cannon = "c1"
 current_ball = "b1"
-current_coins = 0
+current_coins = 200
 window_width = 1250
 window_height = 650
 
@@ -270,7 +270,6 @@ class Game(object):
                 monster.collided = True
                 self.mass += monster.mass
                 monster.velocity = 0
-
     class Background(object):
         def __init__(self, num):
             self.back= pygame.transform.scale(pygame.image.load("images/P_Cave_Background.jpg"), (1300, 650))
@@ -279,7 +278,7 @@ class Game(object):
         def move(self, window, v):
             self.backx += v
             if self.backx >= 1250:
-                self.backx = -2590
+                self.backx = -1350
             window.blit(self.back, (self.backx, self.backy))
         def shaky(self, shake):
             self.backy += shake
