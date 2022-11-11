@@ -244,27 +244,33 @@ class Game(object):
         self.window = pygame.display.set_mode((window_width, window_height))
         self.windowclock = pygame.time.Clock()
         self.monsters = pygame.sprite.Group()
-    class Cannon(object):
-        def __init__(self):
+        self.cannons = pygame.sprite.Group()
+    class Cannon(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
             self.mass = cannon_dict[current_cannon]["m"]
             self.momentum = ball_dict[current_ball]["m"]*ball_dict[current_ball]["v"]
             self.velocity = self.momentum/self.mass
             self.acc = 0.005
             self.image = pygame.image.load(cannon_dict[current_cannon]["mainimg"])
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+
             self.monstercollisioncount = 0
         def updatemovement(self):
             self.velocity -= self.acc
             self.momentum = self.mass*self.velocity
 
-        def draw(self, window, y):
-            window.blit(self.image, (600,400+y))
+        #def draw(self, window, y):
+            #window.blit(self.image, (600,400+y))
 
         def monstercollisioncheck(self, monster):
             if self.rect.colliderect(monster) and not monster.collided:
                 monster.collided = True
                 self.mass += monster.mass
                 monster.velocity = 0
-                monster.
+
     class Background(object):
         def __init__(self, num):
             self.back= pygame.transform.scale(pygame.image.load("images/P_Cave_Background.jpg"), (1300, 650))
@@ -321,10 +327,9 @@ class Game(object):
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.clicked = False
 
-
-
     def loop(self):
-        cannon = self.Cannon()
+        cannon = self.Cannon(600, 800)
+        self.cannons.add(cannon)
         button_back = Button(
             "Home",
             (0, 0),
@@ -342,13 +347,15 @@ class Game(object):
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.monsters.empty()
                     self.running = False
                 if button_back.click(event):
+                    self.monsters.empty()
                     self.running = False
                 for monster in self.monsters:
                     monster.clickcheck(event)
 
-            if time > 1.1 and time<5:
+            if time > 1.1 and time < 5:
                 if up:
                     back1.shaky(shake)
                     back2.shaky(shake)
@@ -366,6 +373,7 @@ class Game(object):
             else:
                 self.drawPrefire(cannon, button_back, back1)
             if cannon.velocity <= 0:
+                self.monsters.empty()
                 self.running = False
             time += 1/60
             pygame.display.update()
@@ -374,13 +382,14 @@ class Game(object):
     def draw(self, cannon, monster, button_back, back1, back2):
         for monster in self.monsters:
             monster.normalmovement(cannon.velocity)
+            cannon.monstercollisioncheck(monster)
             if monster.dead:
                 self.monsters.remove(monster)
         cannon.updatemovement()
         monster.normalmovement(cannon.velocity)
         back1.move(self.window, cannon.velocity)
         back2.move(self.window, cannon.velocity)
-        cannon.draw(self.window, back1.backy)
+        self.cannons.draw(self.window)
         button_back.draw()
         self.monsters.draw(self.window)
         cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass} kg', False, (0, 0, 0))
@@ -389,7 +398,9 @@ class Game(object):
         self.window.blit(cannon_velocity_text, (850, 520))
     def drawPrefire(self, cannon, button_back, back1):
         back1.move(self.window, 0)
-        cannon.draw(self.window, back1.backy)
+        self.cannons.draw(self.window)
+        cannon.rect.y = back1.backy + 400
+
         button_back.draw()
         cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass + ball_dict[current_ball]["m"]} kg', False,
                                              (0, 0, 0))
