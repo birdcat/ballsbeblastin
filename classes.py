@@ -364,6 +364,9 @@ class Game(object):
             self.windowclock.tick(60)
 
     def draw(self, cannon, monster, button_back, back1, back2):
+        for monster in self.monsters:
+            if monster.dead:
+                self.monsters.remove(monster)
         cannon.updatemovement()
         monster.normalmovement(cannon.velocity)
         back1.move(self.window, cannon.velocity)
