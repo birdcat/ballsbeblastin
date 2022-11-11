@@ -311,7 +311,6 @@ class Game(object):
             else:
                 self.x += velocity
                 self.rect.x = self.x
-                print(self.rect.x)
                 if self.countercounter == 20:
                     self.counter += 1
                     if self.counter == 11:
@@ -362,7 +361,8 @@ class Game(object):
                     self.monsters.empty()
                     self.running = False
                 for monster in self.monsters:
-                    monster.clickcheck(event)
+                    if not monster.collided:
+                        monster.clickcheck(event)
 
             if time > 1.1 and time < 5:
                 if up:
@@ -395,7 +395,6 @@ class Game(object):
             if monster.dead:
                 self.monsters.remove(monster)
         cannon.updatemovement()
-        monster.normalmovement(cannon.velocity)
         back1.move(self.window, cannon.velocity)
         back2.move(self.window, cannon.velocity)
         self.cannons.draw(self.window)
