@@ -261,8 +261,9 @@ class Game(object):
 
             self.monstercollisioncount = 0
         def updatemovement(self):
-            self.velocity -= self.acc
-            self.momentum = self.mass*self.velocity
+            self.velocity = self.momentum/self.mass - self.acc
+            self.momentum = self.velocity * self.mass
+
 
         #def draw(self, window, y):
             #window.blit(self.image, (600,400+y))
@@ -271,6 +272,7 @@ class Game(object):
             if self.rect.colliderect(monster) and not monster.collided:
                 monster.collided = True
                 self.mass += monster.mass
+                self.momentum -= monster.velocity*monster.mass
                 monster.velocity = 0
     class Background(object):
         def __init__(self, num):
