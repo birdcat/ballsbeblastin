@@ -7,7 +7,7 @@ from dictionaries import monster_dict
 current_screen = 1
 current_cannon = "c1"
 current_ball = "b1"
-current_coins = 200
+current_coins = 0
 window_width = 1250
 window_height = 650
 
@@ -301,16 +301,20 @@ class Game(object):
             self.clicked = False
             self.collided = False
             self.counter = 1
+            self.countercounter = 0
             self.dead = False
         def normalmovement(self, velocity):
             if self.collided:
                 t = 0
             else:
                 self.rect.x += velocity
-                if self.counter == 11:
-                    self.counter = 1
-                self.image = pygame.image.load(self.images + "/" + str(self.counter) + ".tiff")
-                self.counter += 1
+                if self.countercounter == 20:
+                    self.counter += 1
+                    if self.counter == 11:
+                        self.counter = 1
+                    self.countercounter = 0
+                    self.image = pygame.image.load(self.images + "/" + str(self.counter) + ".tiff")
+                self.countercounter += 1
         def clickcheck(self, event):
             x, y = pygame.mouse.get_pos()
             global current_coins
