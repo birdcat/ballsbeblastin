@@ -380,7 +380,7 @@ class Game(object):
                         shake -= 0.5
                     up = True
             if time > 1:
-                self.draw(cannon, monster, button_back, back1, back2)
+                self.draw(cannon, button_back, back1, back2)
             else:
                 self.drawPrefire(cannon, button_back, back1)
             if cannon.velocity <= 0:
@@ -390,7 +390,7 @@ class Game(object):
             pygame.display.update()
             self.windowclock.tick(60)
 
-    def draw(self, cannon, monster, button_back, back1, back2):
+    def draw(self, cannon, button_back, back1, back2):
         for monster in self.monsters:
             monster.normalmovement(cannon.velocity)
             cannon.monstercollisioncheck(monster)
