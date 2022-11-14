@@ -3,10 +3,15 @@ from dictionaries import cannon_dict
 from dictionaries import ball_dict
 from dictionaries import monster_dict
 
+#from vars import current_ball1
+
+
 # global variables moved to separate file later
 current_cannon = "c1"
 current_ball = "b1"
 current_coins = 200
+
+
 
 # window stuff
 window_width = 1250
@@ -97,6 +102,7 @@ class Menu(object):
             # Add all your event tasking things here
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    setGlobe()
                     pygame.quit()
                     quit()
                 if button_store.click(event):
@@ -156,6 +162,7 @@ class Store(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    setGlobe()
                 if button_back.click(event):
                     self.running = False
                 for cannon in self.cannons:
@@ -380,9 +387,13 @@ class Game(object):
                     if event.type == pygame.QUIT:
                         self.monsters.empty()
                         self.running = False
+                        endS=True
+                        setGlobe()
                     if button_back.click(event):
                         self.monsters.empty()
                         self.running = False
+                        endS=True
+                        setGlobe()
                     for monster in self.monsters:
                         if not monster.collided:
                             monster.clickcheck(event)
@@ -414,16 +425,18 @@ class Game(object):
                 time += 1/60
                 pygame.display.update()
                 self.windowclock.tick(60)
-            while endS:
+            while endS and self.running:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.monsters.empty()
                         self.running = False
                         endS=False
+                        setGlobe()
                     if button_leave.click(event):
                         self.monsters.empty()
                         self.running = False
                         endS = False
+                        setGlobe()
                 self.window.blit(distance_text, (0, 300))
                 button_leave.draw()
                 pygame.display.update()
@@ -463,6 +476,10 @@ class Game(object):
         distance_text = label_font.render(f'Distance: {distance} kg', False, (0, 0, 0))
         self.window.blit(distance_text, (850, 540))
 
-
+def setGlobe():
+    with open("vars.py", "w") as f:
+        f.write(f"current_ball1='{current_ball}'\n")
+        f.write(f"current_cannon1='{current_cannon}'\n")
+        f.write(f"current_coins={current_coins}")
 if __name__ == '__main__':
     Menu()
