@@ -91,7 +91,7 @@ ball_dict = {
     "b6": {"mainimg": "images/balls/b6main.png",
            "boughtimg":"images/balls/b6bought.png",
            "notboughtimg": "images/balls/b6notbought.png",
-           "m": 1,
+           "m": 10,
            "v": 20,
            "cost": 400,
            "bought": False}}

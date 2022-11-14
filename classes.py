@@ -10,7 +10,7 @@ from vars import current_ball1, current_cannon1, current_coins1
 # global variables moved to separate file later
 current_cannon = "c1"
 current_ball = "b1"
-current_coins = 200
+current_coins = 1000
 
 
 
