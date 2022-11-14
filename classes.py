@@ -2,6 +2,7 @@ import pygame, sys
 from dictionaries import cannon_dict
 from dictionaries import ball_dict
 from dictionaries import monster_dict
+from vars import current_ball1, current_cannon1, current_coins1
 
 #from vars import current_ball1
 
@@ -480,6 +481,6 @@ def setGlobe():
     with open("vars.py", "w") as f:
         f.write(f"current_ball1='{current_ball}'\n")
         f.write(f"current_cannon1='{current_cannon}'\n")
-        f.write(f"current_coins={current_coins}")
+        f.write(f"current_coins1={current_coins}")
 if __name__ == '__main__':
     Menu()
