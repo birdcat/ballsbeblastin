@@ -353,7 +353,7 @@ class Game(object):
             (100, 50),
             self.window
         )
-        monster = self.Monster(monster_dict, "m2", 0, 400)
+        monster = self.Monster(monster_dict, "m1", 0, 400)
         print(-cannon.velocity*300)
         self.monsters.add(monster)
         ball = self.Ball()
