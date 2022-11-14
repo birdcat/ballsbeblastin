@@ -1,4 +1,5 @@
 import pygame, sys
+import random
 from dictionaries import cannon_dict
 from dictionaries import ball_dict
 from dictionaries import monster_dict
@@ -11,8 +12,6 @@ from vars import current_ball1, current_cannon1, current_coins1
 current_cannon = "c1"
 current_ball = "b1"
 current_coins = 1000
-
-
 
 # window stuff
 window_width = 1250
@@ -296,7 +295,7 @@ class Game(object):
             self.backy += shake
 
     class Monster(pygame.sprite.Sprite):
-        def __init__(self, monster_dict, name,  x, y):
+        def __init__(self, monster_dict, name, x, y):
             super().__init__()
             self.name = name
             self.images = monster_dict[name]["imagefolder"]
@@ -328,6 +327,16 @@ class Game(object):
                     self.countercounter = 0
                     self.image = pygame.image.load(self.images + "/" + str(self.counter) + ".tiff")
                 self.countercounter += 1
+
+                if self.name == "m2":
+                    if self.counter < 5:
+                        self.rect.y -= 2
+                    elif self.counter < 6:
+                        self.rect.y -= 1
+                    elif self.counter < 7:
+                        self.rect.y += 1
+                    else:
+                        self.rect.y += 2
         def clickcheck(self, event):
             x, y = pygame.mouse.get_pos()
             global current_coins
@@ -375,6 +384,7 @@ class Game(object):
         shake = 50
         endS = False
         coin_pre = current_coins
+        monsterdistcount = 1
         button_leave = Button(
             "Leave",
             (0, 0),
@@ -398,6 +408,12 @@ class Game(object):
                     for monster in self.monsters:
                         if not monster.collided:
                             monster.clickcheck(event)
+
+                if distance // 20 == monsterdistcount:
+                    monsterdistcount += 1
+                    print("hello")
+                    self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 400))
+
                 if time > 1.3 and time < 5:
                     if up:
                         back1.shaky(shake)
@@ -438,7 +454,8 @@ class Game(object):
                         self.running = False
                         endS = False
                         setGlobe()
-                self.window.blit(distance_text, (0, 300))
+                pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 200, 1200, 200))
+                self.window.blit(distance_text, (75, 300))
                 button_leave.draw()
                 pygame.display.update()
                 self.windowclock.tick(60)
