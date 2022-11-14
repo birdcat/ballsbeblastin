@@ -335,7 +335,15 @@ class Game(object):
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.clicked = False
-
+    class Ball(object):
+        def __init__(self):
+            self.ball = pygame.image.load(ball_dict[current_ball]["mainimg"])
+            self.v = ball_dict[current_ball]["v"]*20
+            self.x = 650
+            self.y = 300
+        def draw(self, window, shake):
+            self.x += self.v
+            window.blit(self.ball, (self.x, self.y))
     def loop(self):
         cannon = self.Cannon(600, 800)
         self.cannons.add(cannon)
@@ -345,12 +353,14 @@ class Game(object):
             (100, 50),
             self.window
         )
-        monster = self.Monster(monster_dict, "m1", 0, 400)
+        monster = self.Monster(monster_dict, "m2", 0, 400)
         print(-cannon.velocity*300)
         self.monsters.add(monster)
+        ball = self.Ball()
         #self.window.fill((255, 255, 255))
         back1 = self.Background(0)
         back2 = self.Background(-1300)
+        ball.draw(self.window, 0)
         time = 0
         shake = 50
         up = True
@@ -366,7 +376,7 @@ class Game(object):
                     if not monster.collided:
                         monster.clickcheck(event)
 
-            if time > 1.1 and time < 5:
+            if time > 1.3 and time < 5:
                 if up:
                     back1.shaky(shake)
                     back2.shaky(shake)
@@ -383,6 +393,8 @@ class Game(object):
                 self.draw(cannon, button_back, back1, back2)
             else:
                 self.drawPrefire(cannon, button_back, back1)
+            if time > 1 and time < 1.3:
+                ball.draw(self.window, shake)
             if cannon.velocity <= 0:
                 self.monsters.empty()
                 self.running = False
