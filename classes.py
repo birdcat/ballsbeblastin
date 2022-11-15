@@ -5,8 +5,19 @@ from dictionaries import ball_dict
 from dictionaries import monster_dict
 from vars import current_ball1, current_cannon1, current_coins1
 
-#from vars import current_ball1
+# current_cannon="current_cannon1"
+# current_ball="current_ball1"
+# current_cannon="current_coins1"
 
+with open('dictionaries.py', 'r') as f: # 'r' is a reading mode
+    text = f.read()
+    print(text)
+
+
+print(ball_dict)
+
+#with open('vars.py', 'w') as f: # 'r' is a reading mode
+   # f.write(text)
 
 # global variables moved to separate file later
 current_cannon = "c1"
@@ -216,14 +227,12 @@ class Store(object):
                             current_coins -= self.cost
                             self.image = pygame.image.load(self.images[0])
                             self.image = pygame.transform.scale(self.image, (150, 150))
-
                             if self.type == "c":
                                 cannon_dict[self.id]["bought"] = True
                                 current_cannon = self.id
                             elif self.type == "b":
                                 ball_dict[self.id]["bought"] = True
                                 current_ball = self.id
-
                         elif self.bought:
                             if self.type == "c":
                                 current_cannon = self.id
@@ -409,11 +418,13 @@ class Game(object):
                         if not monster.collided:
                             monster.clickcheck(event)
 
-                if distance // 20 == monsterdistcount:
+                if distance // 30 == monsterdistcount:
                     monsterdistcount += 1
                     print("hello")
-                    self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 400))
-
+                    if distance > 120:
+                        self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 400))
+                    else:
+                        self.monsters.add(self.Monster(monster_dict, "m1", 0, 400))
                 if time > 1.3 and time < 5:
                     if up:
                         back1.shaky(shake)
@@ -437,7 +448,7 @@ class Game(object):
                 if cannon.velocity <= 0:
                     self.monsters.empty()
                     endS = True
-                    distance_text = title_font.render(f'You traveled {round(distance, 2)} meters '
+                    distance_text = stats_font.render(f'You traveled {round(distance, 2)} meters '
                                                       f'and gained ${current_coins-coin_pre}!', False, (0, 0, 0))
                 time += 1/60
                 pygame.display.update()
@@ -455,7 +466,7 @@ class Game(object):
                         endS = False
                         setGlobe()
                 pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 200, 1200, 200))
-                self.window.blit(distance_text, (75, 300))
+                self.window.blit(distance_text, (5, 300))
                 button_leave.draw()
                 pygame.display.update()
                 self.windowclock.tick(60)
@@ -498,6 +509,10 @@ def setGlobe():
     with open("vars.py", "w") as f:
         f.write(f"current_ball1='{current_ball}'\n")
         f.write(f"current_cannon1='{current_cannon}'\n")
-        f.write(f"current_coins1={current_coins}")
+        f.write(f"current_coins1={current_coins}\n")
+        for i in range(1, 7):
+            f.write(f"bc{i}={cannon_dict[f'c{i}']['bought']}\n")
+        for i in range(1, 7):
+            f.write(f"bb{i}={ball_dict[f'b{i}']['bought']}\n")
 if __name__ == '__main__':
     Menu()

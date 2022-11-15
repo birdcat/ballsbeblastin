@@ -14,6 +14,7 @@ ball_dictionary = {
     "b1": ["images/balls/b1main", "images/balls/b1bought", "images/balls/b1notbought", 10, 2, 0, True],
 }
 '''
+from vars import bc1, bc2, bc3, bc4, bc5, bc6, bb1, bb2, bb3, bb4, bb5, bb6
 cannon_dict = {
     "c1": {"mainimg": "images/cannons/c1main.png",
            "boughtimg":"images/cannons/c1bought.png",
