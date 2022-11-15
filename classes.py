@@ -1,28 +1,21 @@
 import pygame, sys
 import random
-from dictionaries import cannon_dict
-from dictionaries import ball_dict
-from dictionaries import monster_dict
+from dictionaries_test import cannon_dict
+from dictionaries_test import ball_dict
+from dictionaries_test import monster_dict
 from vars import current_ball1, current_cannon1, current_coins1
 
-# current_cannon="current_cannon1"
-# current_ball="current_ball1"
-# current_cannon="current_coins1"
-
-with open('dictionaries.py', 'r') as f: # 'r' is a reading mode
-    text = f.read()
-    print(text)
-
-
-print(ball_dict)
+current_cannon = current_cannon1
+current_ball = current_ball1
+current_coins = current_coins1
 
 #with open('vars.py', 'w') as f: # 'r' is a reading mode
    # f.write(text)
 
 # global variables moved to separate file later
-current_cannon = "c1"
-current_ball = "b1"
-current_coins = 1000
+#current_cannon = "c1"
+#current_ball = "b1"
+#current_coins = 1000
 
 # window stuff
 window_width = 1250
@@ -205,7 +198,10 @@ class Store(object):
             self.type = type
             self.id = name
             self.images = [boughtimage, notboughtimage]
-            self.image = pygame.image.load(self.images[1])
+            if bought:
+                self.image = pygame.image.load(self.images[0])
+            else:
+                self.image = pygame.image.load(self.images[1])
             self.image = pygame.transform.scale(self.image, (150, 150))
             self.rect = self.image.get_rect()
             self.rect.x = x
@@ -380,7 +376,6 @@ class Game(object):
             self.window
         )
         monster = self.Monster(monster_dict, "m1", 0, 400)
-        print(-cannon.velocity*300)
         self.monsters.add(monster)
         ball = self.Ball()
         #self.window.fill((255, 255, 255))
@@ -420,7 +415,6 @@ class Game(object):
 
                 if distance // 30 == monsterdistcount:
                     monsterdistcount += 1
-                    print("hello")
                     if distance > 120:
                         self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 400))
                     else:
