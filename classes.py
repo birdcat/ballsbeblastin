@@ -361,13 +361,13 @@ class Game(object):
         def __init__(self):
             self.ball = pygame.image.load(ball_dict[current_ball]["mainimg"])
             self.v = ball_dict[current_ball]["v"]*10
-            self.x = 800
+            self.x = 850
             self.y = 300
         def draw(self, window):
             self.x += self.v
             window.blit(self.ball, (self.x, self.y))
     def loop(self):
-        cannon = self.Cannon(800, 800)
+        cannon = self.Cannon(850, 800)
         self.cannons.add(cannon)
         button_back = Button(
             "Home",
