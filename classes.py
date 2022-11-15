@@ -325,7 +325,7 @@ class Game(object):
             else:
                 self.x += velocity
                 self.rect.x = self.x
-                if self.countercounter == 20:
+                if self.countercounter == 15:
                     self.counter += 1
                     if self.counter == 11:
                         self.counter = 1
