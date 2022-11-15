@@ -82,6 +82,8 @@ class Menu(object):
         ball_velocity_text = stats_font.render(f'Ball Velocity:{ball_dict[current_ball]["v"]}', False, (0, 0, 0))
         self.window.blit(ball_velocity_text, (2 * self.width_border, self.menu_stats_y + 100 + self.height_border))
 
+        instructions_text = label_font.render('*Click monsters to gain coins and stop them from colliding with you', False, (0, 0, 0))
+        self.window.blit(instructions_text, (2 * self.width_border, self.menu_stats_y + 400 + self.height_border))
         cannon_image = pygame.transform.scale(pygame.image.load(cannon_dict[current_cannon]["mainimg"]), (500,300))
         self.window.blit(cannon_image, (700, 300))
     def Main(self): # this is the main loop for the menu, game and store loops both run from this
@@ -433,7 +435,7 @@ class Game(object):
                     distance += instantaneous_time*cannon.velocity
                 else:
                     self.drawPrefire(cannon, button_back, back1, distance)
-                if distance > 700 and distance < 701:
+                if distance > 730 and distance < 731:
                     back1.back=pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
                     back2.back = pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
                 if time > 1 and time < 1.3:
@@ -441,11 +443,11 @@ class Game(object):
                 if cannon.velocity <= 0:
                     self.monsters.empty()
                     endS = True
-                    if distance <700:
+                    if distance <730:
                         distance_text = stats_font.render(f'You traveled {round(distance, 2)}m '
                                                       f'and gained {current_coins-coin_pre} coins!', False, (0, 0, 0))
                     else:
-                        distance_text = stats_font.render(f'Congrats, you escaped the cave?', False, (0, 0, 0))
+                        distance_text = stats_font.render(f'You escaped the cave, congrats?', False, (0, 0, 0))
                 time += 1/60
                 pygame.display.update()
                 self.windowclock.tick(60)
@@ -461,7 +463,7 @@ class Game(object):
                         self.running = False
                         endS = False
                         setGlobe()
-                pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 200, 1200, 200))
+                pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 250, 1500, 200))
                 self.window.blit(distance_text, (5, 300))
                 button_leave.draw()
                 pygame.display.update()
