@@ -25,13 +25,13 @@ cannon_dict = {
     "c2": {"mainimg": "images/cannons/c2main.png",
            "boughtimg":"images/cannons/c2bought.png",
            "notboughtimg": "images/cannons/c2notbought.png",
-           "m": 9,
+           "m": 8,
            "cost": 20,
            "bought": bc2},
     "c3": {"mainimg": "images/cannons/c3main.png",
            "boughtimg":"images/cannons/c3bought.png",
            "notboughtimg": "images/cannons/c3notbought.png",
-           "m": 8,
+           "m": 7,
            "cost": 70,
            "bought": bc3},
     "c4": {"mainimg": "images/cannons/c4main.png",
@@ -50,42 +50,42 @@ cannon_dict = {
            "boughtimg":"images/cannons/c6bought.png",
            "notboughtimg": "images/cannons/c6notbought.png",
            "m": 5,
-           "cost": 500,
+           "cost": 700,
            "bought": bc6}}
 
 ball_dict = {
     "b1": {"mainimg": "images/balls/b1main.png",
            "boughtimg":"images/balls/b1bought.png",
            "notboughtimg": "images/balls/b1bought.png",
-           "m": 10,
+           "m": 5,
            "v": 2,
            "cost": 0,
            "bought": bb1},
     "b2": {"mainimg": "images/balls/b2main.png",
            "boughtimg":"images/balls/b2bought.png",
            "notboughtimg": "images/balls/b2notbought.png",
-           "m": 10,
-           "v": 3,
+           "m": 8,
+           "v": 6,
            "cost": 40,
            "bought": bb2},
     "b3": {"mainimg": "images/balls/b3main.png",
            "boughtimg":"images/balls/b3bought.png",
            "notboughtimg": "images/balls/b3notbought.png",
            "m": 6,
-           "v": 4,
+           "v": 9,
            "cost": 120,
            "bought": bb3},
     "b4": {"mainimg": "images/balls/b4main.png",
            "boughtimg":"images/balls/b4bought.png",
            "notboughtimg": "images/balls/b4notbought.png",
-           "m": 10,
+           "m": 15,
            "v": 4,
            "cost": 180,
            "bought": bb4},
     "b5": {"mainimg": "images/balls/b5main.png",
            "boughtimg":"images/balls/b5bought.png",
            "notboughtimg": "images/balls/b5notbought.png",
-           "m": 20,
+           "m": 10,
            "v": 8,
            "cost": 250,
            "bought": bb5},
@@ -94,7 +94,7 @@ ball_dict = {
            "notboughtimg": "images/balls/b6notbought.png",
            "m": 10,
            "v": 20,
-           "cost": 400,
+           "cost": 1000,
            "bought": bb6}}
 
 monster_dict = {
@@ -102,12 +102,12 @@ monster_dict = {
         "imagefolder": "images/monsters/blueslime",
         "mass": 2,
         "velocity": 0,
-        "clickcount": 2,
+        "clickcount": 1,
         "coins": 2
     },
     "m2": {
         "imagefolder": "images/monsters/greenslime",
-        "mass": 6,
+        "mass": 3,
         "velocity": 0,
         "clickcount": 1,
         "coins": 5
@@ -117,7 +117,7 @@ monster_dict = {
         "mass": 4,
         "velocity": 0,
         "clickcount": 2,
-        "coins": 10
+        "coins": 20
     }
 
 

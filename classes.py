@@ -418,7 +418,6 @@ class Game(object):
                     if distance > 120:
                         self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 3)), 0, 400))
                     else:
-                        print("check")
                         self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 400))
                 if time > 1.3 and time < 5:
                     if up:
@@ -438,13 +437,19 @@ class Game(object):
                     distance += instantaneous_time*cannon.velocity
                 else:
                     self.drawPrefire(cannon, button_back, back1, distance)
+                if distance > 700 and distance < 701:
+                    back1.back=pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
+                    back2.back = pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
                 if time > 1 and time < 1.3:
                     ball.draw(self.window)
                 if cannon.velocity <= 0:
                     self.monsters.empty()
                     endS = True
-                    distance_text = stats_font.render(f'You traveled {round(distance, 2)} meters '
-                                                      f'and gained ${current_coins-coin_pre}!', False, (0, 0, 0))
+                    if distance <700:
+                        distance_text = stats_font.render(f'You traveled {round(distance, 2)}m '
+                                                      f'and gained {current_coins-coin_pre} coins!', False, (0, 0, 0))
+                    else:
+                        distance_text = stats_font.render(f'Congrats, you escaped the cave?', False, (0, 0, 0))
                 time += 1/60
                 pygame.display.update()
                 self.windowclock.tick(60)
@@ -489,7 +494,6 @@ class Game(object):
         back1.move(self.window, 0)
         self.cannons.draw(self.window)
         cannon.rect.y = back1.backy + 400
-
         button_back.draw()
         cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass + ball_dict[current_ball]["m"]} kg', False,
                                              (0, 0, 0))
