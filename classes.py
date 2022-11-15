@@ -84,7 +84,7 @@ class Menu(object):
 
         cannon_image = pygame.transform.scale(pygame.image.load(cannon_dict[current_cannon]["mainimg"]), (500,300))
         self.window.blit(cannon_image, (700, 300))
-    def Main(self):
+    def Main(self): # this is the main loop for the menu, game and store loops both run from this
         self.draw()
         button_store = Button(
             "Store",
@@ -100,10 +100,7 @@ class Menu(object):
             )
 
         while True:
-            # put drawing stuff here
-
-            # Event Tasking
-            # Add all your event tasking things here
+            #loop for main function, checks buttons to potentially run game/store loops
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     setGlobe()
@@ -121,7 +118,7 @@ class Menu(object):
             pygame.display.update()
             self.windowclock.tick(60)
 
-class Store(object):
+class Store(object):    #store class, has store loop and store sprites
     def __init__(self, w, h):
         self.bgimg = "images/storebg.jpg"
         self.bg = pygame.image.load(self.bgimg)
@@ -137,7 +134,7 @@ class Store(object):
         self.font = pygame.font.SysFont('Comic Sans MS', 20)
         self.coinx, self.coiny = 700, 20
 
-        # getting all the buttons into groups(should eventually go into seperate function)
+        # getting all the buttons into groups
         xph = 20
         yph = 50
         countph = 0
@@ -155,7 +152,7 @@ class Store(object):
                 xph = 770
                 countph = 0
 
-    def loop(self):
+    def loop(self): #main loop for store
         button_back = Button(
             "Home",
             (0, 0),
@@ -192,7 +189,7 @@ class Store(object):
             self.clock.tick(60)
             # while True:
 
-    class Storebutton(pygame.sprite.Sprite):
+    class Storebutton(pygame.sprite.Sprite): #class for each item in store, taking in stuff from dictionary
         def __init__(self, x, y, name, type, mass, velocity, cost, boughtimage, notboughtimage, bought):
             super().__init__()
             self.type = type
@@ -212,7 +209,7 @@ class Store(object):
             self.bought = bought
             self.font = pygame.font.SysFont('Comic Sans MS', 20)
 
-        def clickcheck(self, event):
+        def clickcheck(self, event): #checks whether or not a button has been clicked and updates needed variables accordingly
             global current_coins, current_ball, current_cannon
             x, y = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -235,9 +232,8 @@ class Store(object):
                             elif self.type == "b":
                                 current_ball = self.id
 
-                print(current_coins, current_cannon, current_ball)
 
-        def printinfo(self, window):
+        def printinfo(self, window): #prints the mass, velocity, and cost of each button onto it so player knows what's up
             mtext = self.font.render(f'MASS:{self.mass}', False, (0, 0, 0))
             window.blit(mtext, (self.rect.x + 110, self.rect.y + 55))
             if self.velocity != "":
@@ -246,7 +242,7 @@ class Store(object):
             ctext = self.font.render(f'${self.cost}', False, (0, 0, 0))
             window.blit(ctext, (self.rect.x + 50, self.rect.y + 125))
 
-    def printcoins(self, current_coins):
+    def printcoins(self, current_coins): # blits text that tells player how many coins they have
         cointext = self.font.render(f'YOU HAVE {current_coins} COINS', False, (0, 0, 0))
         self.window.blit(cointext, (self.coinx, self.coiny))
 
