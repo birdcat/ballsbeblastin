@@ -1,10 +1,10 @@
 current_ball1='b6'
-current_cannon1='c6'
-current_coins1=126
+current_cannon1='c4'
+current_coins1=156
 bc1=True
 bc2=False
 bc3=False
-bc4=False
+bc4=True
 bc5=False
 bc6=True
 bb1=True

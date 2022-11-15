@@ -102,7 +102,7 @@ monster_dict = {
         "imagefolder": "images/monsters/greenslime",
         "mass": 2,
         "velocity": 0,
-        "clickcount": 3,
+        "clickcount": 1,
         "coins": 2
     },
     "m2": {

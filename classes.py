@@ -360,14 +360,14 @@ class Game(object):
     class Ball(object):
         def __init__(self):
             self.ball = pygame.image.load(ball_dict[current_ball]["mainimg"])
-            self.v = ball_dict[current_ball]["v"]*20
-            self.x = 650
+            self.v = ball_dict[current_ball]["v"]*10
+            self.x = 800
             self.y = 300
-        def draw(self, window, shake):
+        def draw(self, window):
             self.x += self.v
             window.blit(self.ball, (self.x, self.y))
     def loop(self):
-        cannon = self.Cannon(600, 800)
+        cannon = self.Cannon(800, 800)
         self.cannons.add(cannon)
         button_back = Button(
             "Home",
@@ -381,7 +381,7 @@ class Game(object):
         #self.window.fill((255, 255, 255))
         back1 = self.Background(0)
         back2 = self.Background(-1300)
-        ball.draw(self.window, 0)
+        ball.draw(self.window)
         time = 0
         instantaneous_time=round(1/60, 2)
         distance = 0
@@ -438,7 +438,7 @@ class Game(object):
                 else:
                     self.drawPrefire(cannon, button_back, back1, distance)
                 if time > 1 and time < 1.3:
-                    ball.draw(self.window, shake)
+                    ball.draw(self.window)
                 if cannon.velocity <= 0:
                     self.monsters.empty()
                     endS = True
