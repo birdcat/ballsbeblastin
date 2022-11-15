@@ -333,7 +333,7 @@ class Game(object):
                     self.image = pygame.image.load(self.images + "/" + str(self.counter) + ".tiff")
                 self.countercounter += 1
 
-                if self.name == "m2":
+                if self.name == "m3":
                     if self.counter < 5:
                         self.rect.y -= 2
                     elif self.counter < 6:
@@ -416,8 +416,9 @@ class Game(object):
                 if distance // 30 == monsterdistcount:
                     monsterdistcount += 1
                     if distance > 120:
-                        self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 400))
+                        self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 3)), 0, 400))
                     else:
+                        print("check")
                         self.monsters.add(self.Monster(monster_dict, "m1", 0, 400))
                 if time > 1.3 and time < 5:
                     if up:
