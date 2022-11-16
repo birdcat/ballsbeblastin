@@ -64,6 +64,8 @@ class Menu(object):
         self.bg = pygame.image.load(self.bgimg)
         self.store = Store(window_width, window_height)
         self.game = Game()
+        self.info = False
+        self.infopic = pygame.image.load("images/info.png")
         self.Main()
 
     def draw(self):
@@ -100,6 +102,12 @@ class Menu(object):
             (100, 50),
             self.window
             )
+        button_info = Button(
+            "Info",
+            (2 * self.width_border, self.menu_stats_y + 270 + self.height_border),
+            (100, 50),
+            self.window
+        )
 
         while True:
             #loop for main function, checks buttons to potentially run game/store loops
@@ -114,9 +122,32 @@ class Menu(object):
                 if button_game.click(event):
                     self.game.running = True
                     self.game.loop()
+                if button_info.click(event):
+                    self.info = True
+                    self.monsterinfoloop()
             self.draw()
             button_store.draw()
             button_game.draw()
+            button_info.draw()
+            pygame.display.update()
+            self.windowclock.tick(60)
+
+    def monsterinfoloop(self):
+        button_leave = Button(
+            "Exit",
+            (125, 75),
+            (100, 50),
+            self.window
+        )
+
+        while self.info:
+            for event in pygame.event.get():
+                if button_leave.click(event):
+                    self.info = False
+
+            self.window.blit(self.infopic, (125, 75))
+            button_leave.draw()
+
             pygame.display.update()
             self.windowclock.tick(60)
 
@@ -514,5 +545,6 @@ def setGlobe():
             f.write(f"bc{i}={cannon_dict[f'c{i}']['bought']}\n")
         for i in range(1, 7):
             f.write(f"bb{i}={ball_dict[f'b{i}']['bought']}\n")
+
 if __name__ == '__main__':
     Menu()
