@@ -381,7 +381,7 @@ class Game(object):
         back2 = self.Background(-1300)
         ball.draw(self.window)
         time = 0
-        instantaneous_time=round(1/60, 2)
+        instantaneous_time=round(1/60, 5)
         distance = 0
         shake = 50
         endS = False
@@ -435,7 +435,7 @@ class Game(object):
                     distance += instantaneous_time*cannon.velocity
                 else:
                     self.drawPrefire(cannon, button_back, back1, distance)
-                if distance > 730 and distance < 731:
+                if distance > 650 and distance < 651:
                     back1.back=pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
                     back2.back = pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
                 if time > 1 and time < 1.3:
@@ -443,7 +443,10 @@ class Game(object):
                 if cannon.velocity <= 0:
                     self.monsters.empty()
                     endS = True
-                    if distance <730:
+                    if distance > 2600:
+                        distance_text = stats_font.render('YOU. ARE. INSANE.', False,
+                                                          (0, 0, 0))
+                    elif distance < 650:
                         distance_text = stats_font.render(f'You traveled {round(distance, 2)}m '
                                                       f'and gained {current_coins-coin_pre} coins!', False, (0, 0, 0))
                     else:
