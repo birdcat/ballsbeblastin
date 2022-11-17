@@ -135,7 +135,7 @@ class Menu(object):
     def monsterinfoloop(self):
         button_leave = Button(
             "Exit",
-            (125, 75),
+            (100, 50),
             (100, 50),
             self.window
         )
@@ -145,7 +145,7 @@ class Menu(object):
                 if button_leave.click(event):
                     self.info = False
 
-            self.window.blit(self.infopic, (125, 75))
+            self.window.blit(self.infopic, (100, 50))
             button_leave.draw()
 
             pygame.display.update()
@@ -153,7 +153,7 @@ class Menu(object):
 
 class Store(object):    #store class, has store loop and store sprites
     def __init__(self, w, h):
-        self.bgimg = "images/storebg.jpg"
+        self.bgimg = "images/storebg.png"
         self.bg = pygame.image.load(self.bgimg)
         self.cannon = current_cannon
         self.ball = current_ball
@@ -165,24 +165,24 @@ class Store(object):    #store class, has store loop and store sprites
         self.cannons = pygame.sprite.Group()
         self.balls = pygame.sprite.Group()
         self.font = pygame.font.SysFont('Comic Sans MS', 20)
-        self.coinx, self.coiny = 700, 20
+        self.coinx, self.coiny = 1050, 5
 
         # getting all the buttons into groups
-        xph = 20
-        yph = 50
+        xph = 125
+        yph = 110
         countph = 0
         for key in cannon_dict:
             self.cannons.add(self.Storebutton(xph, yph + countph, key, "c", cannon_dict[key]["m"], "", cannon_dict[key]["cost"], cannon_dict[key]["boughtimg"], cannon_dict[key]["notboughtimg"], cannon_dict[key]["bought"]))
-            countph += 200
-            if countph >= 600:
-                xph = 220
+            countph += 160
+            if countph >= 480:
+                xph += 200
                 countph = 0
-        xph = 570
+        xph = 700
         for key in ball_dict:
             self.balls.add(self.Storebutton(xph, yph + countph, key, "b", ball_dict[key]["m"], ball_dict[key]["v"], ball_dict[key]["cost"], ball_dict[key]["boughtimg"], ball_dict[key]["notboughtimg"], ball_dict[key]["bought"]))
-            countph += 200
-            if countph >= 600:
-                xph = 770
+            countph += 160
+            if countph >= 480:
+                xph += 200
                 countph = 0
 
     def loop(self): #main loop for store
@@ -206,17 +206,17 @@ class Store(object):    #store class, has store loop and store sprites
 
             self.window.blit(self.bg, (0, 0))
 
-            self.printcoins(current_coins)
+            self.printcoins() # prints current coins, cannon, ball
 
             self.cannons.draw(self.window)
             self.balls.draw(self.window)
 
             button_back.draw()
 
-            for cannon in self.cannons:
+            for cannon in self.cannons: # draws masses of cannons over buttons
                 cannon.printinfo(self.window)
             for ball in self.balls:
-                ball.printinfo(self.window)
+                ball.printinfo(self.window) #draws masses and velocities of balls over buttons
 
             pygame.display.update()
             self.clock.tick(60)
@@ -275,9 +275,13 @@ class Store(object):    #store class, has store loop and store sprites
             ctext = self.font.render(f'${self.cost}', False, (0, 0, 0))
             window.blit(ctext, (self.rect.x + 50, self.rect.y + 125))
 
-    def printcoins(self, current_coins): # blits text that tells player how many coins they have
-        cointext = self.font.render(f'YOU HAVE {current_coins} COINS', False, (0, 0, 0))
+    def printcoins(self): # blits text that tells player how many coins they have
+        cointext = self.font.render(f'COINS: {current_coins}', False, (0, 0, 0))
         self.window.blit(cointext, (self.coinx, self.coiny))
+        cannontext = self.font.render(f'CANNON: Cannon {current_cannon[1]}', False, (0, 0, 0))
+        self.window.blit(cannontext, (self.coinx, self.coiny + 30))
+        balltext = self.font.render(f'BALL: Ball {current_ball[1]}', False, (0, 0, 0))
+        self.window.blit(balltext, (self.coinx, self.coiny + 60))
 
 
 # ==================GAME STUFF==========================

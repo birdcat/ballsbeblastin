@@ -1,6 +1,6 @@
-current_ball1='b3'
-current_cannon1='c3'
-current_coins1=1120
+current_ball1='b6'
+current_cannon1='c2'
+current_coins1=1185
 bc1=True
 bc2=True
 bc3=True
