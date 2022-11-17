@@ -83,9 +83,6 @@ class Menu(object):
         self.window.blit(ball_mass_text, (2*self.width_border, self.menu_stats_y+50+self.height_border))
         ball_velocity_text = stats_font.render(f'Ball Velocity:{ball_dict[current_ball]["v"]}', False, (0, 0, 0))
         self.window.blit(ball_velocity_text, (2 * self.width_border, self.menu_stats_y + 100 + self.height_border))
-
-        instructions_text = label_font.render('*Click monsters to gain coins and stop them from colliding with you', False, (0, 0, 0))
-        self.window.blit(instructions_text, (2 * self.width_border, self.menu_stats_y + 400 + self.height_border))
         cannon_image = pygame.transform.scale(pygame.image.load(cannon_dict[current_cannon]["mainimg"]), (500,300))
         self.window.blit(cannon_image, (700, 300))
     def Main(self): # this is the main loop for the menu, game and store loops both run from this
