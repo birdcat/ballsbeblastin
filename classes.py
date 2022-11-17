@@ -41,9 +41,9 @@ class Button:
         self.surface.blit(self.text, (0, 0))
         self.rect = pygame.Rect(self.x, self.y, size[0], size[1])
         self.window = window
-    def draw(self):
+    def draw(self): # blits button onto screen
         self.window.blit(self.surface, (self.x, self.y))
-    def click(self, event):
+    def click(self, event): # checks if button is clicked(if clicked, returns true)
         x, y = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
@@ -70,7 +70,7 @@ class Menu(object):
         self.infopic = pygame.image.load("images/info.png")
         self.Main()
 
-    def draw(self):
+    def draw(self): # draws all text onto menu screen, updates drawn cannon mass, ball velocity, and ball mass
         self.window.blit(self.bg, (0, 0))
         menu_label = pygame.Rect(self.width_border, self.height_border, self.menu_label_width, self.menu_label_height)
         pygame.draw.rect(self.window, 'black', menu_label, 5)
@@ -109,7 +109,7 @@ class Menu(object):
         )
 
         while True:
-            #loop for main function, checks buttons to potentially run game/store loops
+            # loop for main function, checks buttons to potentially run game/store/info loops
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     setGlobe()
@@ -164,6 +164,7 @@ class Store(object):    #store class, has store loop and store sprites
         self.font = pygame.font.SysFont('Comic Sans MS', 20)
         self.coinx, self.coiny = 1050, 5
 
+
         # getting all the buttons into groups
         xph = 125
         yph = 110
@@ -206,13 +207,13 @@ class Store(object):    #store class, has store loop and store sprites
             self.balls.draw(self.window)
             button_back.draw()
             for cannon in self.cannons:
-                cannon.printinfo(self.window) # draws masses of cannons over buttons
+                cannon.printinfo(self.window)   # draws masses of cannons over buttons
             for ball in self.balls:
-                ball.printinfo(self.window) #draws masses and velocities of balls over buttons
+                ball.printinfo(self.window)   # draws masses and velocities of balls over buttons
             pygame.display.update()
             self.clock.tick(60)
 
-    class Storebutton(pygame.sprite.Sprite): #class for each item in store, taking in stuff from dictionary
+    class Storebutton(pygame.sprite.Sprite):  # class for each item in store, taking in stuff from dictionary
         def __init__(self, x, y, name, type, mass, velocity, cost, boughtimage, notboughtimage, bought):
             super().__init__()
             self.type = type
@@ -232,7 +233,7 @@ class Store(object):    #store class, has store loop and store sprites
             self.bought = bought
             self.font = pygame.font.SysFont('Comic Sans MS', 20)
 
-        def clickcheck(self, event): #checks whether or not a button has been clicked and updates needed variables accordingly
+        def clickcheck(self, event):  # checks whether or not a button has been clicked and updates needed variables accordingly
             global current_coins, current_ball, current_cannon
             x, y = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -256,7 +257,7 @@ class Store(object):    #store class, has store loop and store sprites
                                 current_ball = self.id
 
 
-        def printinfo(self, window): # prints the mass, velocity, and cost of each button onto it so player knows what's up
+        def printinfo(self, window):   # prints the mass, velocity, and cost of each button onto it so player knows what's up
             mtext = self.font.render(f'MASS:{self.mass}', False, (0, 0, 0))
             window.blit(mtext, (self.rect.x + 110, self.rect.y + 55))
             if self.velocity != "":
@@ -265,7 +266,7 @@ class Store(object):    #store class, has store loop and store sprites
             ctext = self.font.render(f'${self.cost}', False, (0, 0, 0))
             window.blit(ctext, (self.rect.x + 50, self.rect.y + 125))
 
-    def printcoins(self): # blits text that tells player how many coins they have
+    def printcoins(self):    # blits text that tells player how many coins they have(as well as what cannon/ball)
         cointext = self.font.render(f'COINS: {current_coins}', False, (0, 0, 0))
         self.window.blit(cointext, (self.coinx, self.coiny))
         cannontext = self.font.render(f'CANNON: Cannon {current_cannon[1]}', False, (0, 0, 0))
@@ -282,6 +283,7 @@ class Game(object): # Game page
         self.windowclock = pygame.time.Clock()
         self.monsters = pygame.sprite.Group()
         self.cannons = pygame.sprite.Group()
+        self.monsterkills = 0
     class Cannon(pygame.sprite.Sprite): # Cannon sprite
         def __init__(self, x, y):
             super().__init__()
@@ -294,13 +296,14 @@ class Game(object): # Game page
             self.rect.x = x
             self.rect.y = y
             self.monstercollisioncount = 0
-        def updatemovement(self): # updates velocity calculation with actual physics!!
+        def updatemovement(self):    # updates velocity calculation with actual physics!!
             self.velocity = self.momentum/self.mass - self.acc
             self.momentum = self.velocity * self.mass
 
-        def monstercollisioncheck(self, monster): # when collided with monster
+        def monstercollisioncheck(self, monster):    # when collided with monster
             if self.rect.colliderect(monster) and not monster.collided:
                 monster.collided = True
+                self.monstercollisioncount += 1
                 self.mass += monster.mass
                 self.momentum -= monster.velocity*monster.mass
                 monster.velocity = 0
@@ -359,7 +362,7 @@ class Game(object): # Game page
                         self.rect.y += 1
                     else:
                         self.rect.y += 2
-        def clickcheck(self, event):
+        def clickcheck(self, event, killcount):
             x, y = pygame.mouse.get_pos()
             global current_coins
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -369,6 +372,7 @@ class Game(object): # Game page
                         self.clicksclicked += 1
                         print(self.clicksclicked)
                         if self.clicksclicked == self.clicksneeded:
+                            killcount += 1
                             self.dead = True
                             current_coins += self.coins
 
@@ -406,6 +410,7 @@ class Game(object): # Game page
         instantaneous_time=round(1/60, 5) # time per tick, used to measure distance
         distance = 0
         shake = 50
+        self.monsterkills = 0
         endS = False # if students finished one run of the game without quitting
         coin_pre = current_coins #pre start coins to calculate how much coins u got
         monsterdistcount = 1
@@ -431,7 +436,8 @@ class Game(object): # Game page
                         setGlobe()
                     for monster in self.monsters:
                         if not monster.collided:
-                            monster.clickcheck(event)
+                            monster.clickcheck(event, self.monsterkills)
+
                 if distance // 30 == monsterdistcount:
                     monsterdistcount += 1 # adds monster every 30 meters
                     if distance > 120:
@@ -466,8 +472,8 @@ class Game(object): # Game page
                         distance_text = stats_font.render('YOU. ARE. INSANE.', False,
                                                           (0, 0, 0))
                     elif distance < 650: # normal ending
-                        distance_text = stats_font.render(f'You traveled {round(distance, 2)}m '
-                                                      f'and gained {current_coins-coin_pre} coins!', False, (0, 0, 0))
+                        distance_text = stats_font.render(f'You traveled {round(distance, 2)}m and gained {current_coins-coin_pre} coins!', False, (0, 0, 0))
+                        monster_text = stats_font.render(f'You collided with {cannon.monstercollisioncount} monsters and killed {self.monsterkills}.', False, (0, 0, 0))
                     else: # success in reaching end screen
                         distance_text = stats_font.render(f'You escaped the cave, congrats?', False, (0, 0, 0))
                 time += 1/60
@@ -487,6 +493,8 @@ class Game(object): # Game page
                         setGlobe()
                 pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 250, 1500, 200))
                 self.window.blit(distance_text, (5, 300))
+                if distance < 650:
+                    self.window.blit(monster_text, (5, 350))
                 button_leave.draw()
                 pygame.display.update()
                 self.windowclock.tick(60)
@@ -498,6 +506,7 @@ class Game(object): # Game page
             monster.normalmovement(cannon.velocity)
             cannon.monstercollisioncheck(monster)
             if monster.dead:
+                self.monsterkills += 1
                 self.monsters.remove(monster)
         cannon.updatemovement()
         back1.move(self.window, cannon.velocity)
