@@ -392,13 +392,16 @@ class Game(object):
                 self.clicked = False
     class Ball(object):
         def __init__(self):
-            self.ball = pygame.image.load(ball_dict[current_ball]["mainimg"])
-            self.v = ball_dict[current_ball]["v"]*10
-            self.x = 850
-            self.y = 300
-        def draw(self, window):
-            self.x += self.v
+            self.ball = pygame.transform.scale(pygame.image.load(ball_dict[current_ball]["mainimg"]), (75, 75))
+            self.v = ball_dict[current_ball]["v"]
+            self.x = 950
+            self.y = 365
+            self.onscreen = True
+        def draw(self, window, cannon_velocity):
+            self.x += self.v + cannon_velocity
             window.blit(self.ball, (self.x, self.y))
+            if self.x >= 1250:
+                self.onscreen = False
     def loop(self):
         cannon = self.Cannon(850, 800)
         self.cannons.add(cannon)
@@ -411,10 +414,9 @@ class Game(object):
         monster = self.Monster(monster_dict, "m1", 0, 400)
         self.monsters.add(monster)
         ball = self.Ball()
-        #self.window.fill((255, 255, 255))
         back1 = self.Background(0)
         back2 = self.Background(-1300)
-        ball.draw(self.window)
+        ball.draw(self.window, 0)
         time = 0
         instantaneous_time=round(1/60, 5)
         distance = 0
@@ -466,15 +468,13 @@ class Game(object):
                             shake -= 0.5
                         up = True
                 if time > 1:
-                    self.draw(cannon, button_back, back1, back2, distance)
+                    self.draw(cannon, button_back, back1, back2, distance, ball)
                     distance += instantaneous_time*cannon.velocity
                 else:
                     self.drawPrefire(cannon, button_back, back1, distance)
                 if distance > 650 and distance < 651:
                     back1.back=pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
                     back2.back = pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
-                if time > 1 and time < 1.3:
-                    ball.draw(self.window)
                 if cannon.velocity <= 0:
                     self.monsters.empty()
                     endS = True
@@ -508,7 +508,7 @@ class Game(object):
                 self.windowclock.tick(60)
 
 
-    def draw(self, cannon, button_back, back1, back2, distance):
+    def draw(self, cannon, button_back, back1, back2, distance, ball):
         for monster in self.monsters:
             monster.normalmovement(cannon.velocity)
             cannon.monstercollisioncheck(monster)
@@ -517,6 +517,8 @@ class Game(object):
         cannon.updatemovement()
         back1.move(self.window, cannon.velocity)
         back2.move(self.window, cannon.velocity)
+        if ball.onscreen:
+            ball.draw(self.window, cannon.velocity)
         self.cannons.draw(self.window)
         button_back.draw()
         self.monsters.draw(self.window)
