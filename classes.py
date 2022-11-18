@@ -441,9 +441,10 @@ class Game(object): # Game page
                 if distance // 30 == monsterdistcount:
                     monsterdistcount += 1 # adds monster every 30 meters
                     if distance > 120:
-                        self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 3)), 0, 400))
+                        self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 3)), 0, 385 + random.randint(1, 30)))
                     else:
-                        self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 400))
+                        self.monsters.add(self.Monster(monster_dict, "m" + str(random.randint(1, 2)), 0, 385 + random.randint(1, 30)))
+
                 if time > 1.3 and time < 5: # shaking animation after ball gets shot
                     if up:
                         back1.shaky(shake)
@@ -457,11 +458,13 @@ class Game(object): # Game page
                         if shake > 0:
                             shake -= 0.5
                         up = True
+
                 if time > 1: # animation after things start moving
                     self.draw(cannon, button_back, back1, back2, distance, ball)
                     distance += instantaneous_time*cannon.velocity
                 else: # animation before things start moving
                     self.drawPrefire(cannon, button_back, back1, distance)
+
                 if distance > 650 and distance < 651: # reached ending distance, make background matrix
                     back1.back=pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
                     back2.back = pygame.transform.scale(pygame.image.load("images/matrix background.jpg"), (1300, 650))
