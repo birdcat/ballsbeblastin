@@ -4,20 +4,11 @@ import random
 from dictionaries_test import cannon_dict
 from dictionaries_test import ball_dict
 from dictionaries_test import monster_dict
-# importing global variables
+# importing and setting global variables
 from vars import current_ball1, current_cannon1, current_coins1
-
 current_cannon = current_cannon1
 current_ball = current_ball1
 current_coins = current_coins1
-
-#with open('vars.py', 'w') as f: # 'r' is a reading mode
-   # f.write(text)
-
-# global variables moved to separate file later
-#current_cannon = "c1"
-#current_ball = "b1"
-#current_coins = 1000
 
 # window stuff
 window_width = 1250
@@ -76,7 +67,6 @@ class Menu(object):
         pygame.draw.rect(self.window, 'black', menu_label, 5)
         menu_stats = pygame.Rect(self.width_border, self.menu_stats_y, self.menu_label_width, self.menu_stats_height)
         pygame.draw.rect(self.window, 'black', menu_stats, 5)
-
         title_text = title_font.render("BALLS BE BLASTIN'", False, (0, 0, 0))
         self.window.blit(title_text, (2 * self.width_border, 50))
         cannon_mass_text = stats_font.render(f'Cannon Mass:{cannon_dict[current_cannon]["m"]}', False, (0, 0, 0))
@@ -521,7 +511,7 @@ class Game(object): # Game page
         self.monsters.draw(self.window)
         cannon_mass_text = label_font.render(f'Cannon Mass: {cannon.mass} kg', False, (0, 0, 0))
         self.window.blit(cannon_mass_text, (850, 500))
-        cannon_velocity_text = label_font.render(f'Cannon Velocity: {round(cannon.velocity, 2)} m/s', False, (0, 0, 0))
+        cannon_velocity_text = label_font.render(f'Cannon Velocity: {abs(round(cannon.velocity, 2))} m/s', False, (0, 0, 0))
         self.window.blit(cannon_velocity_text, (850, 520))
         distance_text = label_font.render(f'Distance: {round(distance, 2)} m', False, (0, 0, 0))
         self.window.blit(distance_text, (850, 540))
