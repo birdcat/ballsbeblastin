@@ -386,7 +386,7 @@ class Game(object): # Game page
             self.y = 365
             self.onscreen = True
         def draw(self, window, cannon_velocity):
-            self.x += self.v + cannon_velocity
+            self.x += 5*self.v + cannon_velocity*2
             window.blit(self.ball, (self.x, self.y))
             if self.x >= 1250:
                 self.onscreen = False

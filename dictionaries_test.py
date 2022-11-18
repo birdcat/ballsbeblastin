@@ -43,13 +43,13 @@ cannon_dict = {
     "c5": {"mainimg": "images/cannons/c5main.png",
            "boughtimg":"images/cannons/c5bought.png",
            "notboughtimg": "images/cannons/c5notbought.png",
-           "m": 2,
+           "m": 4,
            "cost": 200,
            "bought": bc5},
     "c6": {"mainimg": "images/cannons/c6main.png",
            "boughtimg":"images/cannons/c6bought.png",
            "notboughtimg": "images/cannons/c6notbought.png",
-           "m": 5,
+           "m": 2,
            "cost": 700,
            "bought": bc6}}
 
@@ -116,7 +116,7 @@ monster_dict = {
         "imagefolder": "images/monsters/redslime",
         "mass": 3,
         "velocity": 0,
-        "clickcount": 1,
+        "clickcount": 2,
         "coins": 20
     }
 
